@@ -33,6 +33,19 @@ extension Parser {
         }
     }
     
+    /// `p.manyTill(end)`尝试多次应用p，直到end成功为止，end不会消耗输入
+    ///
+    /// - Parameter end: 成功则表示结束
+    /// - Returns:       成功解析的结果数组
+    func manyTill(_ end: Parser<Token, Stream>) -> Parser<[Token], Stream> {
+        return Parser<[Token], Stream> { (input) -> ParseResult<([Token], Stream)> in
+            var remain = input
+            while true {
+                
+            }
+        }
+    }
+    
     /// 匹配0个或多个由separator分隔的self
     ///
     /// - Parameter separator: 分隔符
@@ -56,6 +69,27 @@ extension Parser {
             } else {
                 return .success((results, remain))
             }
+        })
+    }
+    
+    /// `p.count(n)`尝试将解析器p连续应用n次，返回结果集合
+    ///
+    /// - Parameter num: 解析次数, 为0则返回[]
+    /// - Returns:       解析结果列表或错误
+    func count(_ num: Int) -> Parser<[Token], Stream> {
+        return Parser<[Token], Stream>(parse: { (input) -> ParseResult<([Token], Stream)> in
+            var results = [Token]()
+            var remain = input
+            for _ in 0..<num {
+                switch self.parse(remain) {
+                case .success(let (r, rest)):
+                    results.append(r)
+                    remain = rest
+                case .failure(let error):
+                    return .failure(error)
+                }
+            }
+            return .success((results, remain))
         })
     }
     

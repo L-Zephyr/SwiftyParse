@@ -51,6 +51,21 @@ class ParserTest: XCTestCase {
     
     // MARK: - Alternative
     
+    func testChoice() {
+        let parser = TestParser.choice(match("a"), match("b"))
+        guard case let .success((r, remain)) = parser.parse(["a", "b", "c"]) else {
+            XCTAssert(false)
+            return
+        }
+        XCTAssert(r == "a")
+        XCTAssert(remain == ["b", "c"])
+        
+        guard case .failure(_) = parser.parse(["c", "d", "e"]) else {
+            XCTAssert(false)
+            return
+        }
+    }
+    
     // MARK: - Monad
     
     // MARK: - Operators
@@ -97,6 +112,21 @@ class ParserTest: XCTestCase {
         XCTAssert(remain == ["b"])
         
         guard case .failure(_) = match("b").many.parse(input) else {
+            XCTAssert(false)
+            return
+        }
+    }
+    
+    func testCount() {
+        let input = ["a", "a", "b"]
+        guard case let .success((r, remain)) = match("a").count(2).parse(input) else {
+            XCTAssert(false)
+            return
+        }
+        XCTAssert(r == ["a", "a"])
+        XCTAssert(remain == ["b"])
+        
+        guard case .failure(_) = match("a").count(3).parse(input) else {
             XCTAssert(false)
             return
         }
