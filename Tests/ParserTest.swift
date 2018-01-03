@@ -111,7 +111,18 @@ class ParserTest: XCTestCase {
         XCTAssert(r == ["a", "a"])
         XCTAssert(remain == ["b"])
         
-        guard case .failure(_) = match("b").many.parse(input) else {
+        guard case .success(let (r2, remain2)) = match("b").many.parse(input) else {
+            XCTAssert(false)
+            return
+        }
+        XCTAssert(r2 == [])
+        XCTAssert(remain2 == ["a", "a", "b"])
+    }
+    
+    func testMany1() {
+        let input = ["a", "a", "b"]
+        
+        guard case .failure(_) = match("b").many1.parse(input) else {
             XCTAssert(false)
             return
         }
@@ -146,5 +157,16 @@ class ParserTest: XCTestCase {
             XCTAssert(false)
             return
         }
+    }
+    
+    func testManyTill() {
+        let input = ["a", "a", "b", "c"]
+        guard case let .success((r, remain)) = match("a").manyTill(match("b")).parse(input) else {
+            XCTAssert(false)
+            return
+        }
+        
+        XCTAssert(r == ["a", "a"])
+        XCTAssert(remain == ["b", "c"])
     }
 }

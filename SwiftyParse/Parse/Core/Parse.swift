@@ -56,4 +56,5 @@ extension ParseResult {
 
 public enum ParseError: Error {
     case Unkown
+    case EndOfStream // stream为空
 }

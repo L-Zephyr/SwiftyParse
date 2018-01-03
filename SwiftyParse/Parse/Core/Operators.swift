@@ -9,8 +9,25 @@
 import Foundation
 
 extension Parser {
-    /// 尝试执行多次parse，至少执行一次，结果为空则返回错误
+    /// 执行0次或多次parse，直到出错为止，解析结束返回结果列表，该Parser不会返回错误
     var many: Parser<[Token], Stream> {
+        return Parser<[Token], Stream> { (stream) -> ParseResult<([Token], Stream)> in
+            var result = [Token]()
+            var remain = stream
+            while true {
+                switch self.parse(remain) {
+                case .success(let (r, rest)):
+                    result.append(r)
+                    remain = rest
+                case .failure(_):
+                    return .success((result, remain))
+                }
+            }
+        }
+    }
+    
+    /// 尝试执行1次或多次parse，结果为空则返回错误
+    var many1: Parser<[Token], Stream> {
         return Parser<[Token], Stream> { (stream) -> ParseResult<([Token], Stream)> in
             var result = [Token]()
             var remain = stream
@@ -23,9 +40,6 @@ extension Parser {
                     if result.count == 0 {
                         return .failure(error)
                     } else {
-                        #if DEBUG
-                            print("many parse stop: \(error)")
-                        #endif
                         return .success((result, remain))
                     }
                 }
@@ -33,15 +47,26 @@ extension Parser {
         }
     }
     
-    /// `p.manyTill(end)`尝试多次应用p，直到end成功为止，end不会消耗输入
+    /// `p.manyTill(end)`尝试多次应用p，直到end成功或解析错误为止，end不会消耗输入
     ///
     /// - Parameter end: 成功则表示结束
-    /// - Returns:       成功解析的结果数组
+    /// - Returns:       成功解析的结果数组或错误
     func manyTill(_ end: Parser<Token, Stream>) -> Parser<[Token], Stream> {
         return Parser<[Token], Stream> { (input) -> ParseResult<([Token], Stream)> in
             var remain = input
+            var results = [Token]()
             while true {
+                if case .success(_) = end.parse(remain) {
+                    return .success((results, remain))
+                }
                 
+                switch self.parse(remain) {
+                case .success(let (r, rest)):
+                    results.append(r)
+                    remain = rest
+                case .failure(let error):
+                    return .failure(error)
+                }
             }
         }
     }
@@ -93,7 +118,7 @@ extension Parser {
         })
     }
     
-    /// 按照顺序依次解析open、self、close，最后返回self的结果，open和close中的输入被消耗掉
+    /// 按照顺序依次解析open、self、close，最后返回self的结果，open和close会消耗输入但不会出现在结果中
     ///
     /// - Parameters:
     ///   - open:  在self左侧的操作符
@@ -102,4 +127,5 @@ extension Parser {
     func between<L, R>(_ open: Parser<L, Stream>, _ close: Parser<R, Stream>) -> Parser<Token, Stream> {
         return open *> self <* close;
     }
+    
 }
