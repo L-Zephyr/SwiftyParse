@@ -8,13 +8,25 @@
 
 import Foundation
 
-typealias StringParser = Parser<String, String>
+public typealias StringParser = Parser<Character, String>
 
-extension Parser where Token == String, Stream == String {
+// MARK: - 快捷方法
+
+public func char(_ c: Character) -> StringParser {
+    return StringParser.char(c)
+}
+
+public func string(_ s: String) -> Parser<String, String> {
+    return StringParser.string(s)
+}
+
+// MARK: -
+
+public extension Parser where Token == Character, Stream == String {
     
     /// 创建一个解析指定字符的Parser
-    static func satisfy(_ c: Character) -> StringParser {
-        return StringParser(parse: { (string) -> ParseResult<(String, String)> in
+    static func char(_ c: Character) -> StringParser {
+        return StringParser(parse: { (string) -> ParseResult<(Character, String)> in
             guard let first = string.first else {
                 return .failure(ParseError.Unkown) // TODO: 错误处理
             }
@@ -22,13 +34,13 @@ extension Parser where Token == String, Stream == String {
                 return .failure(ParseError.Unkown)
             }
             let left = String(string.dropFirst())
-            return .success((String(first), left))
+            return .success((first, left))
         })
     }
     
     /// 创建一个解析指定字符串的Parser
     static func string(_ s: String) -> Parser<String, String> {
-        return StringParser(parse: { (string) -> ParseResult<(String, String)> in
+        return Parser<String, String>(parse: { (string) -> ParseResult<(String, String)> in
             guard string.hasPrefix(s) else {
                 return .failure(ParseError.Unkown) // TODO: 错误处理
             }
@@ -36,4 +48,6 @@ extension Parser where Token == String, Stream == String {
             return .success((s, remain))
         })
     }
+    
+    
 }

@@ -8,11 +8,11 @@
 
 import Foundation
 
-func <|> <T, S>(lhs: Parser<T, S>, rhs: Parser<T, S>) -> Parser<T, S> {
+public func <|> <T, S>(lhs: Parser<T, S>, rhs: Parser<T, S>) -> Parser<T, S> {
     return lhs.or(rhs)
 }
 
-extension Parser {
+public extension Parser {
     
     /// 在`q.or(p)`中，先尝试应用q，成功则直接返回结果，失败则使用最初的输入继续尝试p，返回p的结果
     ///

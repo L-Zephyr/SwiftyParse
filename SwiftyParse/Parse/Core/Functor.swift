@@ -8,11 +8,11 @@
 
 import Foundation
 
-func <^> <T, Stream, U>(f: @escaping (T) -> U, p: Parser<T, Stream>) -> Parser<U, Stream> {
+public func <^> <T, Stream, U>(f: @escaping (T) -> U, p: Parser<T, Stream>) -> Parser<U, Stream> {
     return p.map(f)
 }
 
-extension Parser {
+public extension Parser {
     func map<U>(_ f: @escaping (Token) -> U) -> Parser<U, Stream> {
         return Parser<U, Stream>(parse: { (stream) -> ParseResult<(U, Stream)> in
             switch self.parse(stream) {

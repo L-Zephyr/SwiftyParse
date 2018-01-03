@@ -10,11 +10,11 @@ import Foundation
 
 // MARK: - Parser
 
-struct Parser<Token, Stream> {
+public struct Parser<Token, Stream> {
     var parse: (Stream) -> ParseResult<(Token, Stream)>
 }
 
-extension Parser {
+public extension Parser {
     /// 始终返回success，结果为t，不消耗输入
     func pure(_ t: Token) -> Parser<Token, Stream> {
         return Parser(parse: { (stream) -> ParseResult<(Token, Stream)> in
@@ -30,7 +30,7 @@ public enum ParseResult<T> {
     case failure(ParseError)
 }
 
-extension ParseResult {
+public extension ParseResult {
     /// 可选值，如果解析成功返回结果，解析失败返回nil
     var value: T? {
         switch self {

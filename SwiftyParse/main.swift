@@ -8,6 +8,4 @@
 
 import Foundation
 
-let parser = StringParser.satisfy("a").many
-
-print(parser.parse("aabc"))
+print("Hello SwiftyParse")

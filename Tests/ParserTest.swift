@@ -169,4 +169,15 @@ class ParserTest: XCTestCase {
         XCTAssert(r == ["a", "a"])
         XCTAssert(remain == ["b", "c"])
     }
+    
+    func testAttempt() {
+        let input = ["a", "b", "c"]
+        guard case let .success((r, remain)) = match("b").attempt.parse(input) else {
+            XCTAssert(false)
+            return
+        }
+        
+        XCTAssert(r == nil)
+        XCTAssert(remain == input)
+    }
 }

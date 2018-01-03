@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B79851FFD232700A1D436 /* StringParserTest.swift */; };
 		BB8D107B1FF73CB80051A4AE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D107A1FF73CB80051A4AE /* main.swift */; };
 		BB8D10821FF76F5F0051A4AE /* PriorityDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10811FF76F5F0051A4AE /* PriorityDefine.swift */; };
 		BB8D10841FF770F90051A4AE /* Applicative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10831FF770F90051A4AE /* Applicative.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BB1B79851FFD232700A1D436 /* StringParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringParserTest.swift; sourceTree = "<group>"; };
 		BB8D10771FF73CB80051A4AE /* SwiftyParse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftyParse; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB8D107A1FF73CB80051A4AE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BB8D10811FF76F5F0051A4AE /* PriorityDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityDefine.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				BB8D10921FF772270051A4AE /* Tests.swift */,
 				BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */,
+				BB1B79851FFD232700A1D436 /* StringParserTest.swift */,
 				BB8D10941FF772270051A4AE /* Info.plist */,
 			);
 			path = Tests;
@@ -249,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */,
 				BB8D10931FF772270051A4AE /* Tests.swift in Sources */,
 				BB8D109F1FF78C050051A4AE /* Functor.swift in Sources */,
 				BB8D109E1FF78C030051A4AE /* Parse.swift in Sources */,

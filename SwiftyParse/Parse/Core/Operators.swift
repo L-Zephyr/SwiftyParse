@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Parser {
+public extension Parser {
     /// 执行0次或多次parse，直到出错为止，解析结束返回结果列表，该Parser不会返回错误
     var many: Parser<[Token], Stream> {
         return Parser<[Token], Stream> { (stream) -> ParseResult<([Token], Stream)> in
@@ -128,4 +128,15 @@ extension Parser {
         return open *> self <* close;
     }
     
+    /// 尝试解析，如果失败的话返回结果nil且不消耗输入，不会返回错误
+    var attempt: Parser<Token?, Stream> {
+        return Parser<Token?, Stream>(parse: { (input) -> ParseResult<(Token?, Stream)> in
+            switch self.parse(input) {
+            case .success(let (r, remain)):
+                return .success((r, remain))
+            case .failure(_):
+                return .success((nil, input))
+            }
+        })
+    }
 }

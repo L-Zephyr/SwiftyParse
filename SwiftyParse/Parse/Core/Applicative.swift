@@ -9,12 +9,12 @@
 import Foundation
 
 /// 顺序执行两个parser，然后将右侧parser的结果应用到左侧返回的函数中
-func <*> <T, U, S>(lhs: Parser<(T) -> U, S>, rhs: Parser<T, S>) -> Parser<U, S> {
+public func <*> <T, U, S>(lhs: Parser<(T) -> U, S>, rhs: Parser<T, S>) -> Parser<U, S> {
     return rhs.apply(lhs)
 }
 
 /// 顺序执行两个parser，最后直接抛弃左侧parser的结果，返回右侧parser的结果
-func *> <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<U, S> {
+public func *> <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<U, S> {
     return Parser<U, S> { (tokens) -> ParseResult<(U, S)> in
         let lresult = lhs.parse(tokens)
         guard let l = lresult.value else {
@@ -31,7 +31,7 @@ func *> <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<U, S> {
 }
 
 /// 顺序执行两个parser，最后直接抛弃有侧parser的结果，返回左侧parser的结果
-func <* <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<T, S> {
+public func <* <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<T, S> {
     return Parser<T, S> { (tokens) -> ParseResult<(T, S)> in
         let lresult = lhs.parse(tokens)
         guard let l = lresult.value else {
@@ -47,7 +47,7 @@ func <* <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<T, S> {
     }
 }
 
-extension Parser {
+public extension Parser {
     func apply<U>(_ parser: Parser<(Token) -> U, Stream>) -> Parser<U, Stream> {
         return Parser<U, Stream> { (stream) -> ParseResult<(U, Stream)> in
             let lresult = parser.parse(stream)
