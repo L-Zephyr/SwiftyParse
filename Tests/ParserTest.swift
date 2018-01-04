@@ -8,6 +8,13 @@
 
 import XCTest
 
+//extension Array: Equatable {
+//    public static func == (_ lhs: Array, _ rhs: Array) -> Bool {
+//        XCTAssert(false, "The Element in Array must implement Equatable!")
+//        return false
+//    }
+//}
+
 class ParserTest: XCTestCase {
     
     typealias TestParser = Parser<String, [String]>
@@ -25,7 +32,7 @@ class ParserTest: XCTestCase {
     func match(_ s: String) -> TestParser {
         return TestParser(parse: { (strings) -> ParseResult<(String, [String])> in
             guard let first = strings.first, first == s else {
-                return .failure(ParseError.Unkown)
+                return .failure(ParseError.unkown)
             }
             return .success((s, Array(strings.dropFirst())))
         })
@@ -38,13 +45,7 @@ class ParserTest: XCTestCase {
             return result + result
         }
         
-        guard case let .success((r, remain)) = parser.parse(["a", "b", "c"]) else {
-            XCTAssert(false)
-            return
-        }
-        
-        XCTAssert(r == "aa")
-        XCTAssert(remain.count == 2)
+        parser.assertSuccess(input: ["a", "b", "c"], value: "aa", remain: ["b", "c"])
     }
 
     // MARK: - Applicative
@@ -53,125 +54,55 @@ class ParserTest: XCTestCase {
     
     func testChoice() {
         let parser = TestParser.choice(match("a"), match("b"))
-        guard case let .success((r, remain)) = parser.parse(["a", "b", "c"]) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r == "a")
-        XCTAssert(remain == ["b", "c"])
         
-        guard case .failure(_) = parser.parse(["c", "d", "e"]) else {
-            XCTAssert(false)
-            return
-        }
+        parser.assertSuccess(input: ["a", "b", "c"], value: "a", remain: ["b", "c"])
+        parser.assertFailure(input: ["c", "d", "e"])
     }
     
     // MARK: - Monad
     
     // MARK: - Operators
     
-    func testSeparatedBySuccess() {
-        let input = ["a", ",", "a", ",", "a"]
+    func testSeparatedBy() {
         let parser = match("a").separatedBy(match(","))
-        guard case let .success((r, remain)) = parser.parse(input) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r == ["a", "a", "a"])
-        XCTAssert(remain.count == 0)
+        
+        parser.assertSuccess(input: ["a", ",", "a", ",", "a"], value: ["a", "a", "a"], remain: [])
+        parser.assertFailure(input: ["a", ",", "a", ","]) // 结果不能跟着分隔符
+        parser.assertFailure(input: ["a"]) // 至少有两个结果
     }
-    
-    func testSeparatedByFail() {
-        let input = ["a"]
-        let parser = match("a").separatedBy(match(","))
-        guard case .failure(_) = parser.parse(input) else {
-            XCTAssert(false)
-            return
-        }
-    }
-    
-    func testSeparatedByEmpty() {
-        let input = ["b"]
-        let parser = match("a").separatedBy(match(","))
-        guard case let .success((r, remain)) = parser.parse(input) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r == [])
-        XCTAssert(remain == ["b"])
-    }
-    
+
     func testMany() {
-        let input = ["a", "a", "b"]
-        
-        guard case let .success((r, remain)) = match("a").many.parse(input) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r == ["a", "a"])
-        XCTAssert(remain == ["b"])
-        
-        guard case .success(let (r2, remain2)) = match("b").many.parse(input) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r2 == [])
-        XCTAssert(remain2 == ["a", "a", "b"])
+        match("a").many.assertSuccess(input: ["a", "a", "b"], value: ["a", "a"], remain: ["b"])
+        match("b").many.assertSuccess(input: ["a", "a", "b"], value: [], remain: ["a", "a", "b"]) // many不返回错误
     }
     
     func testMany1() {
-        let input = ["a", "a", "b"]
-        
-        guard case .failure(_) = match("b").many1.parse(input) else {
-            XCTAssert(false)
-            return
-        }
+        match("b").many1.assertFailure(input: ["a", "a", "b"])
     }
     
     func testCount() {
         let input = ["a", "a", "b"]
-        guard case let .success((r, remain)) = match("a").count(2).parse(input) else {
-            XCTAssert(false)
-            return
-        }
-        XCTAssert(r == ["a", "a"])
-        XCTAssert(remain == ["b"])
         
-        guard case .failure(_) = match("a").count(3).parse(input) else {
-            XCTAssert(false)
-            return
-        }
+        match("a").count(2).assertSuccess(input: input, value: ["a", "a"], remain: ["b"])
+        match("a").count(3).assertFailure(input: input)
     }
     
     func testBetween() {
         let input = ["a", "b", "c"]
-        guard case let .success((r, remain)) = match("b").between(match("a"), match("c")).parse(input) else {
-            XCTAssert(false)
-            return
-        }
         
-        XCTAssert(r == "b")
-        XCTAssert(remain == [])
-
-        guard case .failure(_) = match("a").between(match("a"), match("b")).parse(input) else {
-            XCTAssert(false)
-            return
-        }
+        match("b").between(match("a"), match("c")).assertSuccess(input: input, value: "b", remain: [])
+        match("a").between(match("a"), match("b")).assertFailure(input: input)
     }
     
     func testManyTill() {
         let input = ["a", "a", "b", "c"]
-        guard case let .success((r, remain)) = match("a").manyTill(match("b")).parse(input) else {
-            XCTAssert(false)
-            return
-        }
         
-        XCTAssert(r == ["a", "a"])
-        XCTAssert(remain == ["b", "c"])
+        match("a").manyTill(match("b")).assertSuccess(input: input, value: ["a", "a"], remain: ["b", "c"])
     }
     
     func testAttempt() {
         let input = ["a", "b", "c"]
+        
         guard case let .success((r, remain)) = match("b").attempt.parse(input) else {
             XCTAssert(false)
             return
@@ -179,5 +110,9 @@ class ParserTest: XCTestCase {
         
         XCTAssert(r == nil)
         XCTAssert(remain == input)
+    }
+    
+    func testNotFollowedBy() {
+        
     }
 }

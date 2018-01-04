@@ -14,7 +14,7 @@
 		BB8D10861FF771180051A4AE /* Alternative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10851FF771180051A4AE /* Alternative.swift */; };
 		BB8D10881FF771270051A4AE /* Monad.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10871FF771270051A4AE /* Monad.swift */; };
 		BB8D108A1FF771330051A4AE /* Functor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10891FF771330051A4AE /* Functor.swift */; };
-		BB8D10931FF772270051A4AE /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10921FF772270051A4AE /* Tests.swift */; };
+		BB8D10931FF772270051A4AE /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10921FF772270051A4AE /* Common.swift */; };
 		BB8D10991FF772A40051A4AE /* Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10981FF772A40051A4AE /* Parse.swift */; };
 		BB8D109B1FF7848F0051A4AE /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D109A1FF7848F0051A4AE /* Operators.swift */; };
 		BB8D109D1FF78BEE0051A4AE /* ParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */; };
@@ -51,7 +51,7 @@
 		BB8D10871FF771270051A4AE /* Monad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monad.swift; sourceTree = "<group>"; };
 		BB8D10891FF771330051A4AE /* Functor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functor.swift; sourceTree = "<group>"; };
 		BB8D10901FF772270051A4AE /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB8D10921FF772270051A4AE /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		BB8D10921FF772270051A4AE /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		BB8D10941FF772270051A4AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB8D10981FF772A40051A4AE /* Parse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parse.swift; sourceTree = "<group>"; };
 		BB8D109A1FF7848F0051A4AE /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 		BB8D10911FF772270051A4AE /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				BB8D10921FF772270051A4AE /* Tests.swift */,
+				BB8D10921FF772270051A4AE /* Common.swift */,
 				BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */,
 				BB1B79851FFD232700A1D436 /* StringParserTest.swift */,
 				BB8D10941FF772270051A4AE /* Info.plist */,
@@ -253,7 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */,
-				BB8D10931FF772270051A4AE /* Tests.swift in Sources */,
+				BB8D10931FF772270051A4AE /* Common.swift in Sources */,
 				BB8D109F1FF78C050051A4AE /* Functor.swift in Sources */,
 				BB8D109E1FF78C030051A4AE /* Parse.swift in Sources */,
 				BB8D109D1FF78BEE0051A4AE /* ParserTest.swift in Sources */,

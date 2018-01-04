@@ -28,10 +28,10 @@ public extension Parser where Token == Character, Stream == String {
     static func char(_ c: Character) -> StringParser {
         return StringParser(parse: { (string) -> ParseResult<(Character, String)> in
             guard let first = string.first else {
-                return .failure(ParseError.Unkown) // TODO: 错误处理
+                return .failure(ParseError.unkown) // TODO: 错误处理
             }
             guard first == c else {
-                return .failure(ParseError.Unkown)
+                return .failure(ParseError.unkown)
             }
             let left = String(string.dropFirst())
             return .success((first, left))
@@ -42,12 +42,28 @@ public extension Parser where Token == Character, Stream == String {
     static func string(_ s: String) -> Parser<String, String> {
         return Parser<String, String>(parse: { (string) -> ParseResult<(String, String)> in
             guard string.hasPrefix(s) else {
-                return .failure(ParseError.Unkown) // TODO: 错误处理
+                return .failure(ParseError.unkown) // TODO: 错误处理
             }
             let remain = String(string.dropFirst(s.count))
             return .success((s, remain))
         })
     }
     
-    
+    /// 匹配所有的空白符：空格、\t，不包括换行
+    ///
+    /// - Returns: parser的结果包括匹配成功的空白符，不会返回错误
+    static func spaces() -> Parser<[Character], String> {
+        return Parser<[Character], String>(parse: { (input) -> ParseResult<([Character], String)> in
+            var dropped = [Character]()
+            let remain = input.drop(while: { (c) -> Bool in
+                if c == " " || c == "\t" {
+                    dropped.append(c)
+                    return true
+                }
+                return false
+            })
+            
+            return .success((dropped, String(remain)))
+        })
+    }
 }

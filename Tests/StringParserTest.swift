@@ -8,20 +8,8 @@
 
 import XCTest
 
-extension Parser {
-    func assertSuccess(input: Stream, value: Token, remain: Stream) {
-        
-    }
-    
-    func assertFailure(input: Stream) {
-        
-    }
-}
-
 class StringParserTest: XCTestCase {
     
-    let input = "hello"
-
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -33,12 +21,10 @@ class StringParserTest: XCTestCase {
     }
 
     func testChar() {
-        switch char("h").parse(input) {
-        case .success(let (r, remain)):
-            XCTAssert(r == "h")
-            XCTAssert(remain == "ello")
-        case .failure(_):
-            XCTAssert(false)
-        }
+        char("h").assertSuccess(input: "hello", value: "h", remain: "ello")
+    }
+    
+    func testSpaces() {
+        
     }
 }

@@ -37,10 +37,10 @@ public extension Parser {
     static func choice(_ ps: [Parser<Token, Stream>]) -> Parser<Token, Stream> {
         return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
             if ps.count == 0 {
-                return .failure(ParseError.Unkown) // TODO: 错误类型？
+                return .failure(ParseError.unkown) // TODO: 错误类型？
             }
             
-            var error: ParseError = ParseError.Unkown
+            var error: ParseError = ParseError.unkown
             for parser in ps {
                 switch parser.parse(input) {
                 case .success(let (r, remain)):

@@ -8,6 +8,23 @@
 
 import Foundation
 
+/// 在parser失败的时候返回自定义的错误说明
+///
+/// - Parameters:
+///   - p:     需要执行的parser
+///   - msg:   自定义的错误信息
+/// - Returns: 返回一个新的Parser，出错时返回msg
+func <?><Token, Stream>(_ p: Parser<Token, Stream>, _ msg: String) -> Parser<Token, Stream> {
+    return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+        switch p.parse(input) {
+        case .success(let (r, remain)):
+            return .success((r, remain))
+        case .failure(_):
+            return .failure(.custom(msg))
+        }
+    })
+}
+
 public extension Parser {
     /// 执行0次或多次parse，直到出错为止，解析结束返回结果列表，该Parser不会返回错误
     var many: Parser<[Token], Stream> {
@@ -71,10 +88,10 @@ public extension Parser {
         }
     }
     
-    /// 匹配0个或多个由separator分隔的self
+    /// 匹配0个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: 所有的结果数组，如果只有一个结果则返回错误
+    /// - Returns: 所有的结果数组，如果只有一个结果或解析结果跟着分隔符则返回错误
     func separatedBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
         return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
             guard case let .success((t, r)) = self.parse(stream) else {
@@ -83,14 +100,14 @@ public extension Parser {
             var remain = r
             var results = [t]
             
-            let next = separator *> self
-            while case let .success((t, r)) = next.parse(remain) {
-                results.append(t)
+            let leftP = (separator *> self).many.notFollowedBy(separator)
+            if case let .success((t, r)) = leftP.parse(remain) {
+                results.append(contentsOf: t)
                 remain = r
             }
             
             if results.count == 1 {
-                return .failure(ParseError.Unkown) // TODO: 错误处理
+                return .failure(ParseError.unkown) // TODO: 错误处理
             } else {
                 return .success((results, remain))
             }
@@ -138,5 +155,22 @@ public extension Parser {
                 return .success((nil, input))
             }
         })
+    }
+    
+    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，p不会消耗输入，成功时返回self的值
+    ///
+    /// - Parameter p: 任意结果类型的Parser
+    /// - Returns: 新的Parser，成功时返回self的结果
+    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
+        let not = Parser<U?, Stream>(parse: { (input) -> ParseResult<(U?, Stream)> in
+            switch p.parse(input) {
+            case .success(let (r, _)):
+                return .failure(.notMatch("Unexpected found: \(r)"))
+            case .failure(_):
+                return .success((nil, input))
+            }
+        })
+        
+        return self <* not
     }
 }
