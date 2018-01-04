@@ -113,6 +113,10 @@ class ParserTest: XCTestCase {
     }
     
     func testNotFollowedBy() {
+        let input = ["a", "b", "c"]
         
+        match("a").notFollowedBy(match("c")).assertSuccess(input: input, value: "a", remain: ["b", "c"])
+        match("a").notFollowedBy(match("b")).assertFailure(input: input)
+        match("b").notFollowedBy(match("b")).assertFailure(input: input)
     }
 }
