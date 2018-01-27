@@ -10,11 +10,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SwiftyParse/Parse/Core/Operators.swift"
-            timestampString = "536768876.09268"
+            timestampString = "538750369.8204809"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "Parser"
+            landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftyParse/Parse/Core/Operators.swift"
+            timestampString = "538750369.8205661"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "separatedBy(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -25,13 +41,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SwiftyParse/Parse/Core/Operators.swift"
-            timestampString = "536768876.092749"
+            filePath = "Tests/StringParserTest.swift"
+            timestampString = "538750369.820637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "106"
-            endingLineNumber = "106"
-            landmarkName = "separatedBy(_:)"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "testRange()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Tests/StringParserTest.swift"
+            timestampString = "538750369.821054"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "testRange()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

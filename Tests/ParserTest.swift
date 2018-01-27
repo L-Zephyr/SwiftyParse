@@ -70,6 +70,22 @@ class ParserTest: XCTestCase {
         parser.assertFailure(input: ["a", ",", "a", ","]) // 结果不能跟着分隔符
         parser.assertFailure(input: ["a"]) // 至少有两个结果
     }
+    
+    func testEndBy() {
+        let parser = match("a").endBy(match(","))
+        
+        parser.assertSuccess(input: ["a", ","], value: ["a"], remain: [])
+        parser.assertSuccess(input: ["a", ",", "a", ","], value: ["a", "a"], remain: [])
+        parser.assertSuccess(input: ["a"], value: [], remain: ["a"])
+    }
+    
+    func testEndBy1() {
+        let parser = match("a").endBy1(match(","))
+        
+        parser.assertSuccess(input: ["a", ","], value: ["a"], remain: [])
+        parser.assertSuccess(input: ["a", ",", "a", ","], value: ["a", "a"], remain: [])
+        parser.assertFailure(input: ["a"])
+    }
 
     func testMany() {
         match("a").many.assertSuccess(input: ["a", "a", "b"], value: ["a", "a"], remain: ["b"])
@@ -112,11 +128,26 @@ class ParserTest: XCTestCase {
         XCTAssert(remain == input)
     }
     
+    func testLookahead() {
+        let input = ["a", "b", "c"]
+        
+        let parser = match("b").lookahead <|> match("a")
+        parser.assertSuccess(input: input, value: "a", remain: ["b", "c"])
+    }
+    
     func testNotFollowedBy() {
         let input = ["a", "b", "c"]
         
         match("a").notFollowedBy(match("c")).assertSuccess(input: input, value: "a", remain: ["b", "c"])
         match("a").notFollowedBy(match("b")).assertFailure(input: input)
         match("b").notFollowedBy(match("b")).assertFailure(input: input)
+    }
+    
+    func testRep() {
+        let input = ["a", "a", "a", "b", "c"]
+        
+        match("a").rep(2).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
+        match("a").rep(3).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
+        match("a").rep(4).assertFailure(input: input)
     }
 }

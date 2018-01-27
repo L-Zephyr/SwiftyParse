@@ -8,4 +8,11 @@
 
 import Foundation
 
+let input = """
+A, B, C
+a1, b1, c1
+a2, b2,c2
+"""
+
 print("Hello SwiftyParse")
+

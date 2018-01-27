@@ -16,7 +16,7 @@ public struct Parser<Token, Stream> {
 
 public extension Parser {
     /// 始终返回success，结果为t，不消耗输入
-    func pure(_ t: Token) -> Parser<Token, Stream> {
+    static func just(_ t: Token) -> Parser<Token, Stream> {
         return Parser(parse: { (stream) -> ParseResult<(Token, Stream)> in
             return .success((t, stream))
         })

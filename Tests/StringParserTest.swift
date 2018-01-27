@@ -8,6 +8,27 @@
 
 import XCTest
 
+extension Parser where Token == Array<String>, Stream == String {
+    func assertSuccess(input: Stream, value: Token, remain: Stream) {
+        switch self.parse(input) {
+        case .success(let (r, rest)):
+            XCTAssert(value == r, "结果: \(r)")
+            XCTAssert(rest == remain, "剩余: \(rest)")
+        case .failure(_):
+            XCTAssert(false, "输入: \(input)")
+        }
+    }
+
+    func assertFailure(input: Stream) {
+        switch self.parse(input) {
+        case .success(_):
+            XCTAssert(false, "输入: \(input)")
+        case .failure(_):
+            XCTAssert(true, "输入: \(input)")
+        }
+    }
+}
+
 class StringParserTest: XCTestCase {
     
     override func setUp() {
@@ -21,10 +42,46 @@ class StringParserTest: XCTestCase {
     }
 
     func testChar() {
-        char("h").assertSuccess(input: "hello", value: "h", remain: "ello")
+        char("a").assertSuccess(input: "abc", value: ["a"], remain: "bc")
     }
     
-    func testSpaces() {
+    func testString() {
+        string("hello").assertSuccess(input: "hello world", value: ["hello"], remain: " world")
+    }
+    
+    func testAdd() {
+        let parser = string("hello") + string(" ") + string("world")
+        parser.assertSuccess(input: "hello world", value: ["hello", " ", "world"], remain: "")
+    }
+    
+    func testEnd() {
+        end().assertSuccess(input: "", value: [], remain: "")
+        end().assertFailure(input: "a")
+    }
+    
+    func testEndBy() {
+        endBy("world").assertFailure(input: "hello world")
+        endBy("world").assertFailure(input: "world ")
+        endBy("world").assertSuccess(input: "world", value: ["world"], remain: "")
+    }
+    
+    func testRange() {
+        // 开区间
+        range("0"..<"4").assertSuccess(input: "23", value: ["2"], remain: "3")
+        range("0"..<"4").assertFailure(input: "4")
         
+        // 闭区间
+        range("0"..."4").assertSuccess(input: "43", value: ["4"], remain: "3")
+        range("0"..."4").assertFailure(input: "5")
+    }
+    
+    func testWord() {
+        word().assertSuccess(input: "hello world", value: ["hello"], remain: " world")
+        word().assertSuccess(input: "HELLO world", value: ["HELLO"], remain: " world")
+        word().assertSuccess(input: "hElLo world", value: ["hElLo"], remain: " world")
+    }
+    
+    func testLine() {
+        let line = anyChar().manyTill(char("\n"))
     }
 }
