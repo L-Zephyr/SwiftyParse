@@ -56,6 +56,7 @@ public extension ParseResult {
 
 public enum ParseError: Error {
     case unkown
+    case unexpectedToken
     case endOfStream // stream为空
     case notMatch(String) // 匹配失败
     case custom(String) // 自定义错误信息

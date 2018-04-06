@@ -88,11 +88,11 @@ public extension Parser {
         }
     }
     
-    /// `p.rep(n)`尝试将解析器p至少应用n次，解析失败或成功次数少于n都会返回错误
+    /// `p.repeat(n)`尝试将解析器p至少应用n次，解析失败或成功次数少于n都会返回错误
     ///
     /// - Parameter num: 至少成功解析的次数
     /// - Returns:       成功解析的结果列表
-    func rep(_ num: Int) -> Parser<[Token], Stream> {
+    func `repeat`(_ num: Int) -> Parser<[Token], Stream> {
         return Parser<[Token], Stream>(parse: { (input) -> ParseResult<([Token], Stream)> in
             var result = [Token]()
             var remainder = input
@@ -145,26 +145,56 @@ public extension Parser {
     /// 匹配0个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: 所有的结果数组，如果只有一个结果或解析结果跟着分隔符则返回错误
-    func separatedBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
+    /// - Returns: parser的结果包含所有成功解析Token的数组，在解析完最后一个Token后如果还跟着分隔符的话会返回错误
+    func sepBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
         return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
-            guard case let .success((t, r)) = self.parse(stream) else {
+            guard case let .success((first, remain)) = self.parse(stream) else {
                 return .success(([], stream))
             }
-            var remain = r
-            var results = [t]
-            
-            let leftP = (separator *> self).many.notFollowedBy(separator)
-            if case let .success((t, r)) = leftP.parse(remain) {
-                results.append(contentsOf: t)
-                remain = r
+
+            let remainParser = (separator *> self).many.notFollowedBy(separator)
+
+            switch remainParser.parse(remain) {
+            case let .success((tokens, r)):
+                let results = [first] + tokens
+                return .success((results.flatMap { $0 }, r))
+            case .failure(_):
+                return .failure(.unexpectedToken) // TODO: 分隔符的错误
             }
-            
-            if results.count == 1 {
-                return .failure(ParseError.unkown) // TODO: 错误处理
-            } else {
-                return .success((results.flatMap { $0 }, remain))
-            }
+        })
+    }
+    
+    /// 至少匹配1个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
+    ///
+    /// - Parameter separator: 分隔符
+    /// - Returns: parser的结果包含所有成功解析Token的数组，数组中至少包含一个结果；在解析完最后一个Token后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
+    func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
+//        return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
+//            guard case let .success((t, r)) = self.parse(stream) else {
+//                return .success(([], stream))
+//            }
+//            var remain = r
+//            var results = [t]
+//
+//            let leftP = (separator *> self).many.notFollowedBy(separator)
+//            if case let .success((t, r)) = leftP.parse(remain) {
+//                results.append(contentsOf: t)
+//                remain = r
+//            }
+//
+//            if results.count == 0 {
+//                return .failure(ParseError.unkown) // TODO: 错误处理
+//            } else {
+//                return .success((results.flatMap { $0 }, remain))
+//            }
+//        })
+        return self.flatMap({ (first) -> Parser<[Token], Stream> in
+            return (separator *> self)
+                .many
+                .notFollowedBy(separator)
+                .flatMap({ (tokens) -> Parser<[Token], Stream> in
+                    return .just([first] + tokens)
+                })
         })
     }
     
@@ -218,7 +248,7 @@ public extension Parser {
         })
     }
     
-    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，p不会消耗输入，成功时返回self的值
+    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
     ///
     /// - Parameter p: 任意结果类型的Parser
     /// - Returns: 新的Parser，成功时返回self的结果
@@ -235,7 +265,5 @@ public extension Parser {
         return self <* not
     }
     
-//    static func anyToken: Parser<Token, Stream> {
-//
-//    }
+    
 }

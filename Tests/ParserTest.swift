@@ -8,16 +8,7 @@
 
 import XCTest
 
-//extension Array: Equatable {
-//    public static func == (_ lhs: Array, _ rhs: Array) -> Bool {
-//        XCTAssert(false, "The Element in Array must implement Equatable!")
-//        return false
-//    }
-//}
-
 class ParserTest: XCTestCase {
-    
-    typealias TestParser = Parser<String, [String]>
     
     override func setUp() {
         super.setUp()
@@ -27,15 +18,6 @@ class ParserTest: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
-    }
-    
-    func match(_ s: String) -> TestParser {
-        return TestParser(parse: { (strings) -> ParseResult<(String, [String])> in
-            guard let first = strings.first, first == s else {
-                return .failure(ParseError.unkown)
-            }
-            return .success((s, Array(strings.dropFirst())))
-        })
     }
     
     // MARK: - Functor
@@ -63,12 +45,28 @@ class ParserTest: XCTestCase {
     
     // MARK: - Operators
     
-    func testSeparatedBy() {
-        let parser = match("a").separatedBy(match(","))
+    func testSepBy() {
+        let parser = match("a").sepBy(match(","))
         
-        parser.assertSuccess(input: ["a", ",", "a", ",", "a"], value: ["a", "a", "a"], remain: [])
-        parser.assertFailure(input: ["a", ",", "a", ","]) // 结果不能跟着分隔符
-        parser.assertFailure(input: ["a"]) // 至少有两个结果
+        parser.assertSuccess(input: ["a", ",", "a", ",", "a"], value: ["a", "a", "a"], remain: [], message: "testSepBy-1")
+        parser.assertSuccess(input: ["a"], value: ["a"], remain: [], message: "testSepBy-2")
+        parser.assertSuccess(input: [","], value: [], remain: [","], message: "testSepBy-3")
+        parser.assertSuccess(input: ["b", ",", "b"], value: [], remain: ["b", ",", "b"], message: "testSepBy-4")
+        
+        parser.assertFailure(input: ["a", ",", "a", ","], message: "testSepBy-5") // 结果不能跟着分隔符
+        parser.assertFailure(input: ["a", ","], message: "testSepBy-6") // 结果不能跟着分隔符
+    }
+    
+    func testSepBy1() {
+        let parser = match("a").sepBy1(match(","))
+
+        parser.assertSuccess(input: ["a", ",", "a", ",", "a"], value: ["a", "a", "a"], remain: [], message: "testSepBy1-1")
+        parser.assertSuccess(input: ["a"], value: ["a"], remain: [], message: "testSepBy1-2")
+        
+        parser.assertFailure(input: ["b", ",", "b"], message: "testSepBy1-3")
+        parser.assertFailure(input: [","], message: "testSepBy1-4")
+        parser.assertFailure(input: ["a", ",", "a", ","], message: "testSepBy1-5") // 结果不能跟着分隔符
+        parser.assertFailure(input: ["a", ","], message: "testSepBy1-6") // 结果不能跟着分隔符
     }
     
     func testEndBy() {
@@ -146,8 +144,8 @@ class ParserTest: XCTestCase {
     func testRep() {
         let input = ["a", "a", "a", "b", "c"]
         
-        match("a").rep(2).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
-        match("a").rep(3).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
-        match("a").rep(4).assertFailure(input: input)
+        match("a").repeat(2).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
+        match("a").repeat(3).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
+        match("a").repeat(4).assertFailure(input: input)
     }
 }

@@ -27,6 +27,9 @@
 		BB8D10A41FF78C4F0051A4AE /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D109A1FF7848F0051A4AE /* Operators.swift */; };
 		BB8D10A81FF7DC030051A4AE /* StringParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10A71FF7DC030051A4AE /* StringParser.swift */; };
 		BB8D10A91FF7DC080051A4AE /* StringParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10A71FF7DC030051A4AE /* StringParser.swift */; };
+		BB912B002077A2CD00992570 /* Plus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912AFF2077A2CD00992570 /* Plus.swift */; };
+		BB912B032077A31F00992570 /* Plus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912AFF2077A2CD00992570 /* Plus.swift */; };
+		BB912B052077A5D000992570 /* PlusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912B042077A5D000992570 /* PlusTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +60,8 @@
 		BB8D109A1FF7848F0051A4AE /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTest.swift; sourceTree = "<group>"; };
 		BB8D10A71FF7DC030051A4AE /* StringParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringParser.swift; sourceTree = "<group>"; };
+		BB912AFF2077A2CD00992570 /* Plus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plus.swift; sourceTree = "<group>"; };
+		BB912B042077A5D000992570 /* PlusTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +123,7 @@
 			children = (
 				BB8D10921FF772270051A4AE /* Common.swift */,
 				BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */,
+				BB912B042077A5D000992570 /* PlusTest.swift */,
 				BB1B79851FFD232700A1D436 /* StringParserTest.swift */,
 				BB8D10941FF772270051A4AE /* Info.plist */,
 			);
@@ -132,8 +138,8 @@
 				BB8D10831FF770F90051A4AE /* Applicative.swift */,
 				BB8D10851FF771180051A4AE /* Alternative.swift */,
 				BB8D10871FF771270051A4AE /* Monad.swift */,
-				BB8D109A1FF7848F0051A4AE /* Operators.swift */,
 				BB8D10811FF76F5F0051A4AE /* PriorityDefine.swift */,
+				BB912AFE2077A2B800992570 /* Operators */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -144,6 +150,15 @@
 				BB8D10A71FF7DC030051A4AE /* StringParser.swift */,
 			);
 			path = StringParser;
+			sourceTree = "<group>";
+		};
+		BB912AFE2077A2B800992570 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				BB8D109A1FF7848F0051A4AE /* Operators.swift */,
+				BB912AFF2077A2CD00992570 /* Plus.swift */,
+			);
+			path = Operators;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +254,7 @@
 				BB8D10821FF76F5F0051A4AE /* PriorityDefine.swift in Sources */,
 				BB8D109B1FF7848F0051A4AE /* Operators.swift in Sources */,
 				BB8D10991FF772A40051A4AE /* Parser.swift in Sources */,
+				BB912B002077A2CD00992570 /* Plus.swift in Sources */,
 				BB8D10A81FF7DC030051A4AE /* StringParser.swift in Sources */,
 				BB8D10881FF771270051A4AE /* Monad.swift in Sources */,
 				BB8D10841FF770F90051A4AE /* Applicative.swift in Sources */,
@@ -254,6 +270,7 @@
 			files = (
 				BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */,
 				BB8D10931FF772270051A4AE /* Common.swift in Sources */,
+				BB912B032077A31F00992570 /* Plus.swift in Sources */,
 				BB8D109F1FF78C050051A4AE /* Functor.swift in Sources */,
 				BB8D109E1FF78C030051A4AE /* Parser.swift in Sources */,
 				BB8D109D1FF78BEE0051A4AE /* ParserTest.swift in Sources */,
@@ -263,6 +280,7 @@
 				BB8D10A01FF78C080051A4AE /* Applicative.swift in Sources */,
 				BB8D10A41FF78C4F0051A4AE /* Operators.swift in Sources */,
 				BB8D10A91FF7DC080051A4AE /* StringParser.swift in Sources */,
+				BB912B052077A5D000992570 /* PlusTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

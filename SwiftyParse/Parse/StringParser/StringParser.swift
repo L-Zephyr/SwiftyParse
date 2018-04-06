@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: 结果的类型：String、[String]
+
 public typealias StringParser = Parser<[String], String>
 public typealias StringParserResult = ParseResult<([String], String)>
 //public typealias StringsParser = Parser<[String], String>
