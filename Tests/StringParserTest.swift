@@ -82,6 +82,6 @@ class StringParserTest: XCTestCase {
     }
     
     func testLine() {
-        let line = anyChar().manyTill(char("\n"))
+        
     }
 }

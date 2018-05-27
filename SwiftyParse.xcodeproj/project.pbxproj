@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B79851FFD232700A1D436 /* StringParserTest.swift */; };
+		BB5250F520BAAFE900D017A4 /* ReduceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5250F420BAAFE900D017A4 /* ReduceTest.swift */; };
+		BB86F21B20BA896000EB5D45 /* Reduce.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB86F21A20BA896000EB5D45 /* Reduce.swift */; };
+		BB86F21C20BA896B00EB5D45 /* Reduce.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB86F21A20BA896000EB5D45 /* Reduce.swift */; };
+		BB86F21D20BA897400EB5D45 /* StringParser2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912B062078E43100992570 /* StringParser2.swift */; };
 		BB8D107B1FF73CB80051A4AE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D107A1FF73CB80051A4AE /* main.swift */; };
 		BB8D10821FF76F5F0051A4AE /* PriorityDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10811FF76F5F0051A4AE /* PriorityDefine.swift */; };
 		BB8D10841FF770F90051A4AE /* Applicative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D10831FF770F90051A4AE /* Applicative.swift */; };
@@ -30,6 +34,7 @@
 		BB912B002077A2CD00992570 /* Plus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912AFF2077A2CD00992570 /* Plus.swift */; };
 		BB912B032077A31F00992570 /* Plus.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912AFF2077A2CD00992570 /* Plus.swift */; };
 		BB912B052077A5D000992570 /* PlusTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912B042077A5D000992570 /* PlusTest.swift */; };
+		BB912B072078E43100992570 /* StringParser2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB912B062078E43100992570 /* StringParser2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +51,8 @@
 
 /* Begin PBXFileReference section */
 		BB1B79851FFD232700A1D436 /* StringParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringParserTest.swift; sourceTree = "<group>"; };
+		BB5250F420BAAFE900D017A4 /* ReduceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduceTest.swift; sourceTree = "<group>"; };
+		BB86F21A20BA896000EB5D45 /* Reduce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reduce.swift; sourceTree = "<group>"; };
 		BB8D10771FF73CB80051A4AE /* SwiftyParse */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftyParse; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB8D107A1FF73CB80051A4AE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BB8D10811FF76F5F0051A4AE /* PriorityDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityDefine.swift; sourceTree = "<group>"; };
@@ -62,6 +69,7 @@
 		BB8D10A71FF7DC030051A4AE /* StringParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringParser.swift; sourceTree = "<group>"; };
 		BB912AFF2077A2CD00992570 /* Plus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plus.swift; sourceTree = "<group>"; };
 		BB912B042077A5D000992570 /* PlusTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlusTest.swift; sourceTree = "<group>"; };
+		BB912B062078E43100992570 /* StringParser2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringParser2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +133,7 @@
 				BB8D109C1FF78BEE0051A4AE /* ParserTest.swift */,
 				BB912B042077A5D000992570 /* PlusTest.swift */,
 				BB1B79851FFD232700A1D436 /* StringParserTest.swift */,
+				BB5250F420BAAFE900D017A4 /* ReduceTest.swift */,
 				BB8D10941FF772270051A4AE /* Info.plist */,
 			);
 			path = Tests;
@@ -148,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				BB8D10A71FF7DC030051A4AE /* StringParser.swift */,
+				BB912B062078E43100992570 /* StringParser2.swift */,
 			);
 			path = StringParser;
 			sourceTree = "<group>";
@@ -157,6 +167,7 @@
 			children = (
 				BB8D109A1FF7848F0051A4AE /* Operators.swift */,
 				BB912AFF2077A2CD00992570 /* Plus.swift */,
+				BB86F21A20BA896000EB5D45 /* Reduce.swift */,
 			);
 			path = Operators;
 			sourceTree = "<group>";
@@ -253,12 +264,14 @@
 			files = (
 				BB8D10821FF76F5F0051A4AE /* PriorityDefine.swift in Sources */,
 				BB8D109B1FF7848F0051A4AE /* Operators.swift in Sources */,
+				BB86F21B20BA896000EB5D45 /* Reduce.swift in Sources */,
 				BB8D10991FF772A40051A4AE /* Parser.swift in Sources */,
 				BB912B002077A2CD00992570 /* Plus.swift in Sources */,
 				BB8D10A81FF7DC030051A4AE /* StringParser.swift in Sources */,
 				BB8D10881FF771270051A4AE /* Monad.swift in Sources */,
 				BB8D10841FF770F90051A4AE /* Applicative.swift in Sources */,
 				BB8D108A1FF771330051A4AE /* Functor.swift in Sources */,
+				BB912B072078E43100992570 /* StringParser2.swift in Sources */,
 				BB8D107B1FF73CB80051A4AE /* main.swift in Sources */,
 				BB8D10861FF771180051A4AE /* Alternative.swift in Sources */,
 			);
@@ -271,13 +284,16 @@
 				BB1B79861FFD232700A1D436 /* StringParserTest.swift in Sources */,
 				BB8D10931FF772270051A4AE /* Common.swift in Sources */,
 				BB912B032077A31F00992570 /* Plus.swift in Sources */,
+				BB5250F520BAAFE900D017A4 /* ReduceTest.swift in Sources */,
 				BB8D109F1FF78C050051A4AE /* Functor.swift in Sources */,
+				BB86F21D20BA897400EB5D45 /* StringParser2.swift in Sources */,
 				BB8D109E1FF78C030051A4AE /* Parser.swift in Sources */,
 				BB8D109D1FF78BEE0051A4AE /* ParserTest.swift in Sources */,
 				BB8D10A11FF78C420051A4AE /* PriorityDefine.swift in Sources */,
 				BB8D10A31FF78C4E0051A4AE /* Monad.swift in Sources */,
 				BB8D10A21FF78C4C0051A4AE /* Alternative.swift in Sources */,
 				BB8D10A01FF78C080051A4AE /* Applicative.swift in Sources */,
+				BB86F21C20BA896B00EB5D45 /* Reduce.swift in Sources */,
 				BB8D10A41FF78C4F0051A4AE /* Operators.swift in Sources */,
 				BB8D10A91FF7DC080051A4AE /* StringParser.swift in Sources */,
 				BB912B052077A5D000992570 /* PlusTest.swift in Sources */,

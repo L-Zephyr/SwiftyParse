@@ -37,7 +37,7 @@ public extension Parser {
                     result.append(r)
                     remain = rest
                 case .failure(_):
-                    return .success((result.flatMap { $0 }, remain))
+                    return .success((result.compactMap { $0 }, remain))
                 }
             }
         }
@@ -57,7 +57,7 @@ public extension Parser {
                     if result.count == 0 {
                         return .failure(error)
                     } else {
-                        return .success((result.flatMap { $0 }, remain))
+                        return .success((result.compactMap { $0 }, remain))
                     }
                 }
             }
@@ -74,7 +74,7 @@ public extension Parser {
             var results = [Token]()
             while true {
                 if case .success(_) = end.parse(remain) {
-                    return .success((results.flatMap { $0 }, remain))
+                    return .success((results.compactMap { $0 }, remain))
                 }
                 
                 switch self.parse(remain) {
@@ -112,7 +112,7 @@ public extension Parser {
             }
             
             if result.count >= num {
-                return .success((result.flatMap { $0 }, remainder))
+                return .success((result.compactMap { $0 }, remainder))
             } else if let err = error {
                 return .failure(err)
             } else {
@@ -138,7 +138,7 @@ public extension Parser {
                     return .failure(error)
                 }
             }
-            return .success((results.flatMap { $0 }, remain))
+            return .success((results.compactMap { $0 }, remain))
         })
     }
     
@@ -157,7 +157,7 @@ public extension Parser {
             switch remainParser.parse(remain) {
             case let .success((tokens, r)):
                 let results = [first] + tokens
-                return .success((results.flatMap { $0 }, r))
+                return .success((results.compactMap { $0 }, r))
             case .failure(_):
                 return .failure(.unexpectedToken) // TODO: 分隔符的错误
             }
@@ -225,7 +225,7 @@ public extension Parser {
     }
     
     /// 尝试解析，如果失败的话返回结果nil且不消耗输入，不会返回错误
-    var attempt: Parser<Token?, Stream> {
+    var `try`: Parser<Token?, Stream> {
         return Parser<Token?, Stream>(parse: { (input) -> ParseResult<(Token?, Stream)> in
             switch self.parse(input) {
             case .success(let (r, remain)):
@@ -264,6 +264,4 @@ public extension Parser {
         
         return self <* not
     }
-    
-    
 }

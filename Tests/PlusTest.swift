@@ -21,7 +21,7 @@ class PlusTest: XCTestCase {
     }
     
     func testSingleAddSingle() {
-        let parser = match("a") + match("b")
+        let parser = match("a") ++ match("b")
         
         parser.assertSuccess(input: ["a", "b", "c"], value: ["a", "b"], remain: ["c"])
         parser.assertSuccess(input: ["a", "b"], value: ["a", "b"], remain: [])
@@ -29,7 +29,7 @@ class PlusTest: XCTestCase {
     }
     
     func testSingleAddSeq() {
-        let parser = match("a") + match("b").many
+        let parser = match("a") ++ match("b").many
         
         parser.assertSuccess(input: ["a", "b", "b", "c"], value: ["a", "b", "b"], remain: ["c"])
         parser.assertSuccess(input: ["a", "b", "b"], value: ["a", "b", "b"], remain: [])
@@ -42,7 +42,7 @@ class PlusTest: XCTestCase {
     }
     
     func testSeqAddSingle() {
-        let parser = match("a").many + match("b")
+        let parser = match("a").many ++ match("b")
         
         parser.assertSuccess(input: ["a", "b", "b", "c"], value: ["a", "b"], remain: ["b", "c"])
         parser.assertSuccess(input: ["a", "b", "b"], value: ["a", "b"], remain: ["b"])
@@ -56,7 +56,7 @@ class PlusTest: XCTestCase {
     }
     
     func testSeqAddSeq() {
-        let parser = match("a").many + match("b").many
+        let parser = match("a").many ++ match("b").many
         
         parser.assertSuccess(input: ["a", "a", "b", "b", "c"], value: ["a", "a", "b", "b"], remain: ["c"])
         parser.assertSuccess(input: ["a", "a", "b"], value: ["a", "a", "b"], remain: [])

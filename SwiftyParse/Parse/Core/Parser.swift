@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Parser
 
-public struct Parser<Token, Stream> {
+public struct Parser<Token, Stream: Sequence> {
     var parse: (Stream) -> ParseResult<(Token, Stream)>
 }
 
@@ -56,7 +56,7 @@ public extension ParseResult {
 
 public enum ParseError: Error {
     case unkown
-    case unexpectedToken
+    case unexpectedToken // TODO: 
     case endOfStream // stream为空
     case notMatch(String) // 匹配失败
     case custom(String) // 自定义错误信息

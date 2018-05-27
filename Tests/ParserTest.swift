@@ -114,10 +114,10 @@ class ParserTest: XCTestCase {
         match("a").manyTill(match("b")).assertSuccess(input: input, value: ["a", "a"], remain: ["b", "c"])
     }
     
-    func testAttempt() {
+    func testTry() {
         let input = ["a", "b", "c"]
         
-        guard case let .success((r, remain)) = match("b").attempt.parse(input) else {
+        guard case let .success((r, remain)) = match("b").try.parse(input) else {
             XCTAssert(false)
             return
         }

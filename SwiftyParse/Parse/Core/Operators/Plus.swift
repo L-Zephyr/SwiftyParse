@@ -11,22 +11,37 @@ import Foundation
 /*
  `plus`操作符，从左向右依次解析两个相同类型的Parser，并将它们的结果保存在数组中返回
  */
+precedencegroup ParserPlusLeft {
+    associativity: left
+    lowerThan: LogicalDisjunctionPrecedence
+    higherThan: AssignmentPrecedence
+}
 
-func + <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
+// MARK: - +
+
+infix operator ++ : ParserPlusLeft
+
+// Token + Token = [Token]
+func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
     return lhs.plus(rhs)
 }
 
-func + <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
+// Token + [Token] = [Token]
+func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
     return lhs.plus(rhs)
 }
 
-func + <Token, Stream>(_ lhs: Parser<[Token], Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
+// [Token] + Token = [Token]
+func ++ <Token: Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
     return lhs.plus(rhs)
 }
 
-func + <Token, Stream>(_ lhs: Parser<[Token], Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
+// [Token] + [Token] = [Token]
+func ++ <Token:Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
     return lhs.plus(rhs)
 }
+
+// MARK: - Plus
 
 extension Parser {
     func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token], Stream> {
@@ -55,10 +70,10 @@ extension Parser where Token: Sequence {
         })
     }
     
-    func plus(_ parser: Parser<[Token.Element], Stream>) -> Parser<[Token.Element], Stream> {
+    func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
         return self.flatMap({ (tokens1) -> Parser<[Token.Element], Stream> in
             return parser.flatMap({ (tokens2) -> Parser<[Token.Element], Stream> in
-                return .just(Array(tokens1) + tokens2)
+                return .just(Array(tokens1) + Array(tokens2))
             })
         })
     }
