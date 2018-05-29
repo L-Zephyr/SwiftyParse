@@ -23,6 +23,11 @@ class ReduceTest: XCTestCase {
     func addop(_ n1: Int, _ n2: Int) -> Int {
         return n1 + n2
     }
+    
+    // x^y
+    func expop(_ x: Int, _ y: Int) -> Int {
+        return Int(pow(Double(x), Double(y)))
+    }
 
     func testReduce1() {
         let num = S.digit.map { Int($0)! }
@@ -44,15 +49,25 @@ class ReduceTest: XCTestCase {
         expr.assertSuccess(input: ["v", "s"], value: 0, remain: ["v", "s"], message: "Reduce4")
     }
     
-    func testChain() {
+    func testChainLeft() {
         let num = S.digit.map { Int($0)! }
         let add = S.char("+").map { _ in return self.addop }
-        let expr = num.chain(add)
+        let expr = num.chainL(add)
         
         expr.assertSuccess(input: ["1", "2", "3"], value: 1, remain: ["2", "3"])
         expr.assertSuccess(input: ["1", "+", "2", "+", "3"], value: 6, remain: [])
         expr.assertSuccess(input: ["1", "+", "2", "+"], value: 3, remain: ["+"])
         expr.assertFailure(input: ["+", "2", "+", "3", "+"])
         expr.assertFailure(input: ["v", "s"])
+    }
+    
+    func testChainRight() {
+        let num = S.digit.map { Int($0)! }
+        let exp = S.char("^").map { _ in return self.expop }
+        let expr = num.chainR(exp)
+        
+        expr.assertSuccess(input: ["2", "^", "2", "^", "3"], value: 256, remain: [])
+        expr.assertSuccess(input: ["2", "3"], value: 2, remain: ["3"])
+        expr.assertFailure(input: ["c", "2", "^"])
     }
 }

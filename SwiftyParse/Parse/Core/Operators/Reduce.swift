@@ -9,12 +9,6 @@
 import Foundation
 
 extension Parser {
-    static func foldl(_ op: (Token, Token) -> Token, _ first: Token, _ seq: [Token]) -> Token {
-        return seq.reduce(first, { (first, second) -> Token in
-            return op(first, second)
-        })
-    }
-    
     /// 解析self.many，并将结果通过combinator结合起来，用法类似Sequence的reduce
     ///
     /// - Parameters:
@@ -29,7 +23,7 @@ extension Parser {
         }
     }
     
-    /// 连续解析 combinator + self，combinator解析得到一个闭包，initValue和self的结果作为参数传入闭包得到下一次的参数，用法类似Sequence的reduce，不同的是combinator也会参与解析
+    /// `p.reduce(val, op)`取 val 作为累加值的初始，然后再尝试解析一个 op 和 p ，将累加值和p的结果作为参数传入到op返回的闭包中，将结果作为下一次的参数，循环op和p的解析直到失败为止
     ///
     /// - Parameters:
     ///   - initValue: 初始值，使用该值作为第一个参数传入闭包，并将结果累积
@@ -47,11 +41,39 @@ extension Parser {
         })
     }
     
-    /// 将self解析的结果作为初始值来调用`reduce`
+    /// `p.chainL(op)`首先取 p 的解析结果作为累加值（初始），然后再尝试解析一个 op 和 p ，将累加值和p的结果作为参数传入到op返回的闭包中，将结果作为下一次的参数，循环op和p的解析直到失败为止
     ///
-    /// - Parameter op: Combinator Parser，解析结果为一个闭包
+    /// - Parameter op: 解析结果为一个闭包，用于计算后续的累积值
     /// - Returns: 累积的结果，当self第一次解析失败的时候返回错误
-    func chain(_ op: Parser<(Token, Token) -> Token, Stream>) -> Parser<Token, Stream> {
+    func chainL(_ op: Parser<(Token, Token) -> Token, Stream>) -> Parser<Token, Stream> {
         return self.flatMap { self.reduce($0, op) }
+    }
+    
+    /// 解析过程与chainL类似，但是结果累积的过程是相反的
+    ///
+    /// - Parameter combinator: 解析结果为一个闭包，用于计算后续的累积值
+    /// - Returns: 计算从右向左累积的结果，当self第一次解析失败的时候返回错误
+    func chainR(_ combinator: Parser<(Token, Token) -> Token, Stream>) -> Parser<Token, Stream> {
+        return self.flatMap({ (initValue) -> Parser<Token, Stream> in
+            return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+                var remain = input
+                
+                var ops = [(Token, Token) -> Token]()
+                var nums: [Token] = [initValue]
+                while case .success(let (op, r1)) = combinator.parse(remain), case .success(let (num, r2)) = self.parse(r1) {
+                    ops.append(op)
+                    nums.append(num)
+                    remain = r2
+                }
+                
+                var result = nums.last!
+                // 从右向左累积
+                for index in (0..<ops.count).reversed() {
+                    result = ops[index](nums[index], result)
+                }
+                
+                return .success((result, remain))
+            })
+        })
     }
 }
