@@ -42,46 +42,30 @@ class StringParserTest: XCTestCase {
     }
 
     func testChar() {
-        char("a").assertSuccess(input: "abc", value: ["a"], remain: "bc")
+        S.char("a").assertSuccess(input: ["a", "b", "c"], value: "a", remain: ["b", "c"])
     }
     
     func testString() {
-        string("hello").assertSuccess(input: "hello world", value: ["hello"], remain: " world")
+        S.string("abc").assertSuccess(input: "abcd".toChars(), value: "abc", remain: "d".toChars())
     }
-    
+
     func testAdd() {
-        let parser = string("hello") + string(" ") + string("world")
-        parser.assertSuccess(input: "hello world", value: ["hello", " ", "world"], remain: "")
-    }
-    
-    func testEnd() {
-        end().assertSuccess(input: "", value: [], remain: "")
-        end().assertFailure(input: "a")
-    }
-    
-    func testEndBy() {
-        endBy("world").assertFailure(input: "hello world")
-        endBy("world").assertFailure(input: "world ")
-        endBy("world").assertSuccess(input: "world", value: ["world"], remain: "")
+        let parser = S.string("hello") ++ S.string(" ") ++ S.string("world")
+        parser.assertSuccess(input: "hello world".toChars(), value: ["hello", " ", "world"], remain: "".toChars())
     }
     
     func testRange() {
         // 开区间
-        range("0"..<"4").assertSuccess(input: "23", value: ["2"], remain: "3")
-        range("0"..<"4").assertFailure(input: "4")
+        S.range("0"..<"4").assertSuccess(input: "23".toChars(), value: "2", remain: "3".toChars())
+        S.range("0"..<"4").assertFailure(input: "4".toChars())
         
         // 闭区间
-        range("0"..."4").assertSuccess(input: "43", value: ["4"], remain: "3")
-        range("0"..."4").assertFailure(input: "5")
+        S.range("0"..."4").assertSuccess(input: "43".toChars(), value: "4", remain: "3".toChars())
+        S.range("0"..."4").assertFailure(input: "5".toChars())
     }
     
-    func testWord() {
-        word().assertSuccess(input: "hello world", value: ["hello"], remain: " world")
-        word().assertSuccess(input: "HELLO world", value: ["HELLO"], remain: " world")
-        word().assertSuccess(input: "hElLo world", value: ["hElLo"], remain: " world")
-    }
-    
-    func testLine() {
-        
+    func testSpaces() {
+        S.spaces.assertSuccess(input: [" ", "\t", "\t", "\n", "a"], value: " \t\t\n", remain: ["a"])
+        S.spaces.assertSuccess(input: ["a"], value: "", remain: ["a"])
     }
 }

@@ -108,3 +108,9 @@ func match(_ s: String) -> TestParser {
         return .success((s, Array(strings.dropFirst())))
     })
 }
+
+extension String {
+    func toChars() -> [Character] {
+        return Array(self)
+    }
+}
