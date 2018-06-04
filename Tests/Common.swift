@@ -53,45 +53,25 @@ extension Parser where Token: Equatable, Stream: Equatable {
     }
 }
 
-/// Tip: 下面这一段代码是冗余的，理想情况下应该是这样：extension Array: Equatable where Element: Equatable
-///      但是目前swift不能给一个带泛型约束的extension添加新的协议，所以现在只能先这样写以满足测试需要
-extension Parser where Token: Equatable, Stream == Array<String> {
-    func assertSuccess(input: Stream, value: Token, remain: Stream, message: String = "") {
+// MARK: - StringParser
+
+extension Parser where Token: Equatable, Stream == InputString {
+    func assertSuccess(input: [Character], value: Token, remain: [Character], message: String = "") {
         switch self.parse(input) {
         case .success(let (r, rest)):
-            XCTAssert(value == r, message)
-            XCTAssert(rest == remain, message)
+            XCTAssert(value == r, "结果: \(r), \(message)")
+            XCTAssert(rest.characters == remain, "剩余: \(rest)") // NOTE: 先不考虑位置的对比
         case .failure(_):
-            XCTAssert(false, message)
+            XCTAssert(false, "输入: \(input), \(message)")
         }
     }
     
-    func assertFailure(input: Stream, message: String = "") {
+    func assertFailure(input: [Character], message: String = "") {
         switch self.parse(input) {
         case .success(_):
-            XCTAssert(false, message)
+            XCTAssert(false, "输入: \(input), \(message)")
         case .failure(_):
-            XCTAssert(true, message)
-        }
-    }
-}
-extension Parser where Token == Array<String>, Stream == Array<String> {
-    func assertSuccess(input: Stream, value: Token, remain: Stream, message: String = "") {
-        switch self.parse(input) {
-        case .success(let (r, rest)):
-            XCTAssert(value == r, message)
-            XCTAssert(rest == remain, message)
-        case .failure(_):
-            XCTAssert(false, message)
-        }
-    }
-    
-    func assertFailure(input: Stream, message: String = "") {
-        switch self.parse(input) {
-        case .success(_):
-            XCTAssert(false, message)
-        case .failure(_):
-            XCTAssert(true, message)
+            XCTAssert(true, "输入: \(input), \(message)")
         }
     }
 }

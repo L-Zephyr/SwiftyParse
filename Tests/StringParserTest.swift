@@ -8,26 +8,7 @@
 
 import XCTest
 
-extension Parser where Token == Array<String>, Stream == String {
-    func assertSuccess(input: Stream, value: Token, remain: Stream) {
-        switch self.parse(input) {
-        case .success(let (r, rest)):
-            XCTAssert(value == r, "结果: \(r)")
-            XCTAssert(rest == remain, "剩余: \(rest)")
-        case .failure(_):
-            XCTAssert(false, "输入: \(input)")
-        }
-    }
-
-    func assertFailure(input: Stream) {
-        switch self.parse(input) {
-        case .success(_):
-            XCTAssert(false, "输入: \(input)")
-        case .failure(_):
-            XCTAssert(true, "输入: \(input)")
-        }
-    }
-}
+// MARK: -
 
 class StringParserTest: XCTestCase {
     

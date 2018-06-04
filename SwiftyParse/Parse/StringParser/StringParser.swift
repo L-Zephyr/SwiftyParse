@@ -26,6 +26,12 @@ extension InputString: Sequence {
     }
 }
 
+extension InputString: Equatable {
+    static func == (_ lhs: InputString, _ rhs: InputString) -> Bool {
+        return lhs.characters == rhs.characters && lhs.row == rhs.row && lhs.column == rhs.column
+    }
+}
+
 extension InputString {
     /// 去掉第一个字符，向前进一位，重新计算当前的位置
     func dropFirst() -> InputString {
@@ -68,8 +74,15 @@ extension InputString {
 typealias S = Parser<String, InputString>
 
 extension Parser where Stream == InputString {
+    /// 快捷方法，接收一个字符串作为输入
     func parse(_ string: String) -> ParseResult<(Token, Stream)> {
         let input = InputString(characters: Array(string), row: 0, column: 0)
+        return self.parse(input)
+    }
+    
+    /// 快捷方法，接收一个字符数组作为输入
+    func parse(_ chars: [Character]) -> ParseResult<(Token, Stream)> {
+        let input = InputString(characters: chars, row: 0, column: 0)
         return self.parse(input)
     }
 }
