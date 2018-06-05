@@ -21,6 +21,10 @@ class StringParserTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
+    
+    func addop(_ n1: Int, _ n2: Int) -> Int {
+        return n1 + n2
+    }
 
     func testChar() {
         S.char("a").assertSuccess(input: ["a", "b", "c"], value: "a", remain: ["b", "c"])
@@ -48,5 +52,19 @@ class StringParserTest: XCTestCase {
     func testSpaces() {
         S.spaces.assertSuccess(input: [" ", "\t", "\t", "\n", "a"], value: " \t\t\n", remain: ["a"])
         S.spaces.assertSuccess(input: ["a"], value: "", remain: ["a"])
+    }
+    
+    func testIndex() {
+        let letter = S.range("a"..."z")
+        let parser = letter.sepBy1(S.char(","))
+//        let parser = S.char("a").notFollowedBy(S.char(","))
+        
+        switch parser.parse("a,") {
+        case .success(let (t, remain)):
+            break
+        case .failure(let error):
+            break
+        }
+        
     }
 }

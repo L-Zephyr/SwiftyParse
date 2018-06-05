@@ -116,7 +116,7 @@ public extension Parser {
             } else if let err = error {
                 return .failure(err)
             } else {
-                return .failure(ParseError.unkown)
+                return .failure(.unkown)
             }
         })
     }
@@ -158,8 +158,8 @@ public extension Parser {
             case let .success((tokens, r)):
                 let results = [first] + tokens
                 return .success((results.compactMap { $0 }, r))
-            case .failure(_):
-                return .failure(.unexpectedToken) // TODO: 分隔符的错误
+            case .failure(let error):
+                return .failure(error)
             }
         })
     }
@@ -169,31 +169,12 @@ public extension Parser {
     /// - Parameter separator: 分隔符
     /// - Returns: parser的结果包含所有成功解析Token的数组，数组中至少包含一个结果；在解析完最后一个Token后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
     func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
-//        return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
-//            guard case let .success((t, r)) = self.parse(stream) else {
-//                return .success(([], stream))
-//            }
-//            var remain = r
-//            var results = [t]
-//
-//            let leftP = (separator *> self).many.notFollowedBy(separator)
-//            if case let .success((t, r)) = leftP.parse(remain) {
-//                results.append(contentsOf: t)
-//                remain = r
-//            }
-//
-//            if results.count == 0 {
-//                return .failure(ParseError.unkown) // TODO: 错误处理
-//            } else {
-//                return .success((results.flatMap { $0 }, remain))
-//            }
-//        })
         return self.flatMap({ (first) -> Parser<[Token], Stream> in
             return (separator *> self)
                 .many
                 .notFollowedBy(separator)
                 .flatMap({ (tokens) -> Parser<[Token], Stream> in
-                    return .just([first] + tokens)
+                    return .result([first] + tokens)
                 })
         })
     }
@@ -265,3 +246,28 @@ public extension Parser {
         return self <* not
     }
 }
+
+//extension SatisfyProtocol {
+//    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
+//    ///
+//    /// - Parameter p: 任意结果类型的Parser
+//    /// - Returns: 新的Parser，成功时返回self的结果
+//    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
+//        let not = Parser<U?, Stream>(parse: { (input) -> ParseResult<(U?, Stream)> in
+//            switch p.parse(input) {
+//            case .success(let (r, _)):
+//                return .failure(.notMatch("Unexpected found: \(r)"))
+//            case .failure(_):
+//                return .success((nil, input))
+//            }
+//        })
+//
+//
+//
+//        return self <* not
+//    }
+//}
+
+//extension Parser: SatisfyProtocol where Token == String, Stream == InputString {
+//
+//}

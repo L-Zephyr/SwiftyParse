@@ -47,7 +47,7 @@ extension Parser {
     func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token], Stream> {
         return self.flatMap({ (result1) -> Parser<[Token], Stream> in
             return parser.flatMap({ (result2) -> Parser<[Token], Stream> in
-                return .just([result1, result2])
+                return .result([result1, result2])
             })
         })
     }
@@ -55,7 +55,7 @@ extension Parser {
     func plus(_ parser: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
         return self.flatMap({ (result1) -> Parser<[Token], Stream> in
             return parser.flatMap({ (result2) -> Parser<[Token], Stream> in
-                return .just([result1] + result2)
+                return .result([result1] + result2)
             })
         })
     }
@@ -65,7 +65,7 @@ extension Parser where Token: Sequence {
     func plus(_ parser: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
         return self.flatMap({ (tokens) -> Parser<[Token.Element], Stream> in
             return parser.flatMap({ (token) -> Parser<[Token.Element], Stream> in
-                return .just(Array(tokens) + [token])
+                return .result(Array(tokens) + [token])
             })
         })
     }
@@ -73,7 +73,7 @@ extension Parser where Token: Sequence {
     func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
         return self.flatMap({ (tokens1) -> Parser<[Token.Element], Stream> in
             return parser.flatMap({ (tokens2) -> Parser<[Token.Element], Stream> in
-                return .just(Array(tokens1) + Array(tokens2))
+                return .result(Array(tokens1) + Array(tokens2))
             })
         })
     }

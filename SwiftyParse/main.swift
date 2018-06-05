@@ -28,7 +28,7 @@ let integer = S.digit.many1.map { (digits) -> Int in
 }
 
 let integer2 = S.digit.map { Int($0)! }
-    .chainL(Parser<(Int, Int) -> Int, InputString>.just({ return 10 * $0 + $1 }))
+    .chainL(Parser<(Int, Int) -> Int, InputString>.result({ return 10 * $0 + $1 }))
 
 print(integer2.parse("1234"))
 

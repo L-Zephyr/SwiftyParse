@@ -39,11 +39,11 @@ extension InputString {
         if let first = first {
             switch first {
             case "\n":
-                return InputString(characters: remain, row: 0, column: column + 1)
+                return InputString(characters: remain, row: row + 1, column: 0)
             case "\t":
-                return InputString(characters: remain, row: row + 8, column: column)
+                return InputString(characters: remain, row: row, column: column + 8)
             default:
-                return InputString(characters: remain, row: row + 1, column: column)
+                return InputString(characters: remain, row: row, column: column + 1)
             }
         }
         return InputString(characters: remain, row: row, column: column)
@@ -95,8 +95,11 @@ extension Parser where Token == String, Stream == InputString {
             if let first = input.first(), condition(String(first)) {
                 let value = String(first)
                 return .success((value, input.dropFirst()))
+            } else if input.isEmpty() {
+                return .failure(.endOfInput)
+            } else {
+                return .failure(.notMatch("Unexpected token found: \(input.first()!) (row: \(input.row), column: \(input.column))"))
             }
-            return .failure(.unexpectedToken)
         })
     }
     
@@ -146,14 +149,50 @@ extension Parser where Token == String, Stream == InputString {
     }
 }
 
+// MARK: - NotFollowedBy
+
+/// 为`notFollowedBy`组合子加上出错时的状态数据
+fileprivate func _notFollowedBy<Token, U>(_ this: Parser<Token, InputString>, _ p: Parser<U, InputString>) -> Parser<Token, InputString> {
+    let not = Parser<U?, InputString>(parse: { (input) -> ParseResult<(U?, InputString)> in
+        switch p.parse(input) {
+        case .success(let (r, _)):
+            return .failure(.notMatch("Unexpected token found: \(r) (row: \(input.row), column: \(input.column))"))
+        case .failure(_):
+            return .success((nil, input))
+        }
+    })
+    
+    return this <* not
+}
+
+extension Parser where Token == String, Stream == InputString {
+    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
+    ///
+    /// - Parameter p: 任意结果类型的Parser
+    /// - Returns: 新的Parser，成功时返回self的结果
+    func notFollowedBy<U>(_ p: Parser<U, InputString>) -> Parser<Token, Stream> {
+        return _notFollowedBy(self, p)
+    }
+}
+
+extension Parser where Token == [String], Stream == InputString {
+    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
+    ///
+    /// - Parameter p: 任意结果类型的Parser
+    /// - Returns: 新的Parser，成功时返回self的结果
+    func notFollowedBy<U>(_ p: Parser<U, InputString>) -> Parser<Token, Stream> {
+        return _notFollowedBy(self, p)
+    }
+}
+
 // MARK: - Sequence Extension
 
 fileprivate extension Sequence {
-    func first() -> Element? {
-        for element in self {
-            return element
+    func isEmpty() -> Bool {
+        for _ in self {
+            return false
         }
-        return nil
+        return true
     }
 }
 
