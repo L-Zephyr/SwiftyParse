@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/StringParserTest.swift"
-            timestampString = "549890170.37451"
+            timestampString = "549984986.3376141"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
@@ -47,8 +47,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
             endingLineNumber = "62"
-            landmarkName = "assertSuccess(input:value:remain:message:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
@@ -58,7 +58,7 @@
                   moduleName = "Tests"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lzephyr/Desktop/code/github/SwiftyParse/Tests/Common.swift"
-                  timestampString = "549890171.511048"
+                  timestampString = "549984987.482214"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "62"
@@ -73,7 +73,7 @@
                   moduleName = "Tests"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lzephyr/Desktop/code/github/SwiftyParse/Tests/Common.swift"
-                  timestampString = "549890171.514961"
+                  timestampString = "549984987.484527"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "62"
@@ -88,7 +88,7 @@
                   moduleName = "Tests"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/lzephyr/Desktop/code/github/SwiftyParse/Tests/Common.swift"
-                  timestampString = "549890171.518665"
+                  timestampString = "549984987.48701"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "62"
@@ -101,27 +101,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftyParse/Parse/StringParser/StringParser.swift"
-            timestampString = "549890170.375087"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "101"
-            endingLineNumber = "101"
-            landmarkName = "satisfy(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/StringParserTest.swift"
-            timestampString = "549890170.37515"
+            timestampString = "549984986.3377039"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
@@ -137,7 +121,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/StringParserTest.swift"
-            timestampString = "549890170.37545"
+            timestampString = "549984986.337755"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "64"
@@ -153,7 +137,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/StringParserTest.swift"
-            timestampString = "549890170.3758121"
+            timestampString = "549984986.337801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "63"
@@ -169,44 +153,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Tests/StringParserTest.swift"
-            timestampString = "549890170.376067"
+            timestampString = "549984986.337845"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "64"
             endingLineNumber = "64"
             landmarkName = "testIndex()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftyParse/Parse/StringParser/StringParser.swift"
-            timestampString = "549890197.3050441"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "notFollowedBy(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "SwiftyParse/Parse/StringParser/StringParser.swift"
-            timestampString = "549890198.2101901"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
-            landmarkName = "notFollowedBy(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

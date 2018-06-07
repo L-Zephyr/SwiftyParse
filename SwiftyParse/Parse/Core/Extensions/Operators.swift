@@ -246,28 +246,3 @@ public extension Parser {
         return self <* not
     }
 }
-
-//extension SatisfyProtocol {
-//    /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
-//    ///
-//    /// - Parameter p: 任意结果类型的Parser
-//    /// - Returns: 新的Parser，成功时返回self的结果
-//    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
-//        let not = Parser<U?, Stream>(parse: { (input) -> ParseResult<(U?, Stream)> in
-//            switch p.parse(input) {
-//            case .success(let (r, _)):
-//                return .failure(.notMatch("Unexpected found: \(r)"))
-//            case .failure(_):
-//                return .success((nil, input))
-//            }
-//        })
-//
-//
-//
-//        return self <* not
-//    }
-//}
-
-//extension Parser: SatisfyProtocol where Token == String, Stream == InputString {
-//
-//}

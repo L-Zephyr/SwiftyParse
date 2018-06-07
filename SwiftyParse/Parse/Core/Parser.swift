@@ -8,32 +8,10 @@
 
 import Foundation
 
-//protocol SatisfyProtocol {
-//    associatedtype Token
-//    associatedtype Stream: Sequence
-//    static func satisfy(_ condition: @escaping (Token) -> Bool) -> Parser<Token, Stream>
-//}
-//
-//protocol ParserProtocol {
-//    associatedtype Token
-//    associatedtype Stream: Sequence
-//    var parse: (Stream) -> ParseResult<(Token, Stream)> { get set }
-//}
-
 // MARK: - Parser
 
 public struct Parser<Token, Stream: Sequence> {
     var parse: (Stream) -> ParseResult<(Token, Stream)>
-}
-
-extension Parser {
-    /// 所有的Parser都需要实现一个`satisfy`方法，返回一个匹配单个Token的Parser
-    ///
-    /// - Parameter condition: 接收一个Token的闭包，判断解析的结果
-    /// - Returns: 解析输入流中单个Token的Parser
-//    static func satisfy(_ condition: @escaping (Token) -> Bool) -> Parser<Token, Stream> {
-//        fatalError("The parser need to implement the `satisfy` method!")
-//    }
 }
 
 public extension Parser {
