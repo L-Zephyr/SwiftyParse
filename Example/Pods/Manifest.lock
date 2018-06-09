@@ -1,0 +1,20 @@
+PODS:
+  - SwiftyParse (0.1.0):
+    - SwiftyParse/Sources (= 0.1.0)
+  - SwiftyParse/Sources (0.1.0)
+  - SwiftyParse/Tests (0.1.0)
+
+DEPENDENCIES:
+  - SwiftyParse (from `../`)
+  - SwiftyParse/Tests (from `../`)
+
+EXTERNAL SOURCES:
+  SwiftyParse:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SwiftyParse: 1867058012c640caad8204af515f7496cf9edb70
+
+PODFILE CHECKSUM: 195dee802eeda5a77c7e7b4084c61222f36b7746
+
+COCOAPODS: 1.5.0

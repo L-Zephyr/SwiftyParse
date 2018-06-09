@@ -1,0 +1,6 @@
+framework module SwiftyParse {
+  umbrella header "SwiftyParse-umbrella.h"
+
+  export *
+  module * { export * }
+}
