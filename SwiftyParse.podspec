@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'SwiftyParse'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of SwiftyParse.'
+  s.summary          = 'Parser combinator in swift'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,15 +18,13 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+A lightweight parser combinator for swift
                        DESC
 
-  s.homepage         = 'https://github.com/lzf.lzephyr@gmail.com/SwiftyParse'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/L-Zephyr/SwiftyParse.git'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'lzf.lzephyr@gmail.com' => 'lzf.lzephyr@gmail.com' }
-  s.source           = { :git => 'https://github.com/lzf.lzephyr@gmail.com/SwiftyParse.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => 'https://github.com/L-Zephyr/SwiftyParse.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
   s.default_subspec = 'Sources'
@@ -50,12 +48,4 @@ TODO: Add long description of the pod here.
   s.test_spec 'Tests' do |test_spec|
       test_spec.source_files = 'SwiftyParse/Tests/*'
   end
-  
-  # s.resource_bundles = {
-  #   'SwiftyParse' => ['SwiftyParse/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end
