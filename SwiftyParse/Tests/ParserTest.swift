@@ -149,4 +149,10 @@ class ParserTest: XCTestCase {
         match("a").repeat(3).assertSuccess(input: input, value: ["a", "a", "a"], remain: ["b", "c"])
         match("a").repeat(4).assertFailure(input: input)
     }
+    
+    func testNot() {
+        let input = ["a", "b"]
+        
+        match("a").not.assertFailure(input: input)
+    }
 }

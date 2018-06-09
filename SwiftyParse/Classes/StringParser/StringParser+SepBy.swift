@@ -8,7 +8,7 @@
 
 import Foundation
 
-// NOTE: 重写sepBy、sepBy1、notFollowedBy组合子，防止丢失错误信息
+// NOTE: 重写sepBy、sepBy1、notFollowedBy、not组合子，防止丢失错误信息
 
 extension Parser where Stream == InputString {
     
@@ -50,28 +50,24 @@ extension Parser where Stream == InputString {
     }
 }
 
-// MARK: - NotFollowedBy
-
-/// 为`notFollowedBy`组合子加上出错时的状态数据
-fileprivate func _notFollowedBy<Token, U>(_ this: Parser<Token, InputString>, _ p: Parser<U, InputString>) -> Parser<Token, InputString> {
-    let not = Parser<U?, InputString>(parse: { (input) -> ParseResult<(U?, InputString)> in
-        switch p.parse(input) {
-        case .success(let (r, _)):
-            return .failure(.notMatch("Unexpected token found: `\(r)` (row: \(input.row), column: \(input.column))"))
-        case .failure(_):
-            return .success((nil, input))
-        }
-    })
-    
-    return this <* not
-}
-
 extension Parser where Stream == InputString {
     /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
     ///
     /// - Parameter p: 任意结果类型的Parser
     /// - Returns: 新的Parser，成功时返回self的结果
     func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
-        return _notFollowedBy(self, p)
+        return self <* p.not
+    }
+    
+    /// `p.not`当p解析成功的时候返回failure，p解析失败的时候返回success, 不消耗输入
+    var not: Parser<Token?, InputString> {
+        return Parser<Token?, InputString>(parse: { (input) -> ParseResult<(Token?, InputString)> in
+            switch self.parse(input) {
+            case .success(let (r, _)):
+                return .failure(.notMatch("Unexpected token found: `\(r)` (row: \(input.row), column: \(input.column))"))
+            case .failure(_):
+                return .success((nil, input))
+            }
+        })
     }
 }
