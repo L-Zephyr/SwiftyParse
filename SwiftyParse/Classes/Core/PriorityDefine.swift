@@ -32,15 +32,27 @@ precedencegroup AlternativePrecedence {
     lowerThan: NilCoalescingPrecedence
 }
 
-precedencegroup ApplicativePrecedence {
+precedencegroup BetweenAlternativeAndApplicative {
     associativity: left
     higherThan: AlternativePrecedence
     lowerThan: NilCoalescingPrecedence
 }
 
-precedencegroup ApplicativeSequencePrecedence {
+precedencegroup ApplicativePrecedence {
+    associativity: left
+    higherThan: BetweenAlternativeAndApplicative
+    lowerThan: NilCoalescingPrecedence
+}
+
+precedencegroup BetweenApplicativeAndSequence {
     associativity: left
     higherThan: ApplicativePrecedence
+    lowerThan: NilCoalescingPrecedence
+}
+
+precedencegroup ApplicativeSequencePrecedence {
+    associativity: left
+    higherThan: BetweenApplicativeAndSequence
     lowerThan: NilCoalescingPrecedence
 }
 
@@ -92,24 +104,6 @@ infix operator >>- : MonadicPrecedenceLeft
  Expected function type: `(a -> m b) -> m a -> m b`
  */
 infix operator -<< : MonadicPrecedenceRight
-
-/**
- compose two functions that produce results in a context,
- from left to right, returning a result in that context
- 
- Expected function type: `(a -> m b) -> (b -> m c) -> a -> m c`
- */
-//infix operator >-> : MonadicPrecedenceRight
-
-/**
- compose two functions that produce results in a context,
- from right to left, returning a result in that context
- 
- like `>->`, but with the arguments flipped
- 
- Expected function type: `(b -> m c) -> (a -> m b) -> a -> m c`
- */
-//infix operator <-< : MonadicPrecedenceRight
 
 /**
  return specified message while the fail
