@@ -27,6 +27,7 @@ A lightweight parser combinator for swift
   s.source           = { :git => 'https://github.com/L-Zephyr/SwiftyParse.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.8'
   s.default_subspec = 'Sources'
   
   # All subspec
