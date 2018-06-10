@@ -10,7 +10,7 @@ import Foundation
 
 
 /// 作为数据源输入的字符串
-struct InputString {
+public struct InputString {
     let characters: [Character] // 剩余的字符
     let row: Int // 当前位置在原始输入中的行号
     let column: Int // 当前位置在原始输入中的列号
@@ -18,7 +18,7 @@ struct InputString {
 
 // MARK: - Extension
 
-extension InputString: Sequence {
+public extension InputString: Sequence {
     typealias Element = Character
     typealias Iterator = Array<Character>.Iterator
     
@@ -27,13 +27,13 @@ extension InputString: Sequence {
     }
 }
 
-extension InputString: Equatable {
+public extension InputString: Equatable {
     static func == (_ lhs: InputString, _ rhs: InputString) -> Bool {
         return lhs.characters == rhs.characters && lhs.row == rhs.row && lhs.column == rhs.column
     }
 }
 
-extension InputString {
+public extension InputString {
     /// 去掉第一个字符，向前进一位，重新计算当前的位置
     func dropFirst() -> InputString {
         let (first, remain) = self.characters.decompose()

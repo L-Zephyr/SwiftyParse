@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Parser {
+public extension Parser {
     /// 解析self.many，并将结果通过combinator结合起来，用法类似Sequence的reduce
     ///
     /// - Parameters:

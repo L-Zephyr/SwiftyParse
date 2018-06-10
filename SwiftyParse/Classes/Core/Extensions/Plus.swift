@@ -22,28 +22,28 @@ precedencegroup ParserPlusLeft {
 infix operator ++ : ParserPlusLeft
 
 // Token + Token = [Token]
-func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
+public func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
     return lhs.plus(rhs)
 }
 
 // Token + [Token] = [Token]
-func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
+public func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
     return lhs.plus(rhs)
 }
 
 // [Token] + Token = [Token]
-func ++ <Token: Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
+public func ++ <Token: Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
     return lhs.plus(rhs)
 }
 
 // [Token] + [Token] = [Token]
-func ++ <Token:Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
+public func ++ <Token:Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
     return lhs.plus(rhs)
 }
 
 // MARK: - Plus
 
-extension Parser {
+public extension Parser {
     func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token], Stream> {
         return self.flatMap({ (result1) -> Parser<[Token], Stream> in
             return parser.flatMap({ (result2) -> Parser<[Token], Stream> in
@@ -61,7 +61,7 @@ extension Parser {
     }
 }
 
-extension Parser where Token: Sequence {
+public extension Parser where Token: Sequence {
     func plus(_ parser: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
         return self.flatMap({ (tokens) -> Parser<[Token.Element], Stream> in
             return parser.flatMap({ (token) -> Parser<[Token.Element], Stream> in

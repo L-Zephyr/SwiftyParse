@@ -10,7 +10,7 @@ import Foundation
 
 // NOTE: 重写sepBy、sepBy1、notFollowedBy、not组合子，防止丢失错误信息
 
-extension Parser where Stream == InputString {
+public extension Parser where Stream == InputString {
     
     /// 匹配0个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
@@ -50,7 +50,7 @@ extension Parser where Stream == InputString {
     }
 }
 
-extension Parser where Stream == InputString {
+public extension Parser where Stream == InputString {
     /// `self.notFollowedBy(p)`仅当p失败的时候返回成功，不会消耗输入，成功时返回self的值
     ///
     /// - Parameter p: 任意结果类型的Parser

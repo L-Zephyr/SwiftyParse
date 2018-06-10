@@ -14,7 +14,7 @@ import Foundation
 ///   - p:     需要执行的parser
 ///   - msg:   自定义的错误信息
 /// - Returns: 返回一个新的Parser，出错时返回msg
-func <?><Token, Stream>(_ p: Parser<Token, Stream>, _ msg: String) -> Parser<Token, Stream> {
+public func <?><Token, Stream>(_ p: Parser<Token, Stream>, _ msg: String) -> Parser<Token, Stream> {
     return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
         switch p.parse(input) {
         case .success(let (r, remain)):

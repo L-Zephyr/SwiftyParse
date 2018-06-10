@@ -10,9 +10,9 @@ import Foundation
 
 // MARK: - Parser
 
-typealias S = Parser<String, InputString>
+public typealias S = Parser<String, InputString>
 
-extension Parser where Stream == InputString {
+public extension Parser where Stream == InputString {
     /// 快捷方法，接收一个字符串作为输入
     func parse(_ string: String) -> ParseResult<(Token, Stream)> {
         let input = InputString(characters: Array(string), row: 0, column: 0)
@@ -26,7 +26,7 @@ extension Parser where Stream == InputString {
     }
 }
 
-extension Parser where Token == String, Stream == InputString {
+public extension Parser where Token == String, Stream == InputString {
     
     /// 创建一个单个字符Parser的快捷方法
     static func satisfy(_ condition: @escaping (Token) -> Bool) -> S {
