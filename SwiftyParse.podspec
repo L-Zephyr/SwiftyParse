@@ -32,21 +32,21 @@ A lightweight parser combinator for swift
   
   # All subspec
   s.subspec 'Sources' do |sp|
-      sp.source_files = 'SwiftyParse/Classes/**/*'
+      sp.source_files = 'Sources/SwiftyParse/**/*'
   end
 
   # Core parser only
   s.subspec 'Core' do |sp|
-      sp.source_files = 'SwiftyParse/Classes/Core/**/*'
+      sp.source_files = 'Sources/SwiftyParse/Core/**/*'
   end
   
   # String parser subspec
   s.subspec 'StringParser' do |sp|
-      sp.source_files = 'SwiftyParse/Classes/StringParser/**/*'
+      sp.source_files = 'Sources/SwiftyParse/StringParser/**/*'
   end
   
   # unit test
   s.test_spec 'Tests' do |test_spec|
-      test_spec.source_files = 'SwiftyParse/Tests/*'
+      test_spec.source_files = 'Tests/*'
   end
 end

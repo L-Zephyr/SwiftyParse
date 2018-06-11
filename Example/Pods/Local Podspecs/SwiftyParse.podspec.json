@@ -1,9 +1,9 @@
 {
   "name": "SwiftyParse",
   "version": "0.1.0",
-  "summary": "A short description of SwiftyParse.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/lzf.lzephyr@gmail.com/SwiftyParse",
+  "summary": "Parser combinator in swift",
+  "description": "A lightweight parser combinator for swift",
+  "homepage": "https://github.com/L-Zephyr/SwiftyParse.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,32 +12,33 @@
     "lzf.lzephyr@gmail.com": "lzf.lzephyr@gmail.com"
   },
   "source": {
-    "git": "https://github.com/lzf.lzephyr@gmail.com/SwiftyParse.git",
+    "git": "https://github.com/L-Zephyr/SwiftyParse.git",
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "8.0",
+    "osx": "10.10"
   },
   "default_subspecs": "Sources",
   "testspecs": [
     {
       "name": "Tests",
       "test_type": "unit",
-      "source_files": "SwiftyParse/Tests/*"
+      "source_files": "Tests/*"
     }
   ],
   "subspecs": [
     {
       "name": "Sources",
-      "source_files": "SwiftyParse/Classes/**/*"
+      "source_files": "Sources/SwiftyParse/**/*"
     },
     {
       "name": "Core",
-      "source_files": "SwiftyParse/Classes/Core/**/*"
+      "source_files": "Sources/SwiftyParse/Core/**/*"
     },
     {
       "name": "StringParser",
-      "source_files": "SwiftyParse/Classes/StringParser/**/*"
+      "source_files": "Sources/SwiftyParse/StringParser/**/*"
     }
   ]
 }
