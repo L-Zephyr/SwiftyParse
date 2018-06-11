@@ -17,7 +17,7 @@ public func -<< <T, U, S>(lhs: @escaping (T) -> Parser<U, S>, rhs: Parser<T, S>)
 }
 
 public extension Parser {
-    func flatMap<U>(_ f: @escaping (Token) -> Parser<U, Stream>) -> Parser<U, Stream> {
+    func flatMap<U>(_ f: @escaping (Result) -> Parser<U, Stream>) -> Parser<U, Stream> {
         return Parser<U, Stream> { (tokens) -> ParseResult<(U, Stream)> in
             switch self.parse(tokens) {
             case .success(let (result, rest)):

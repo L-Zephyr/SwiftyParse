@@ -13,7 +13,7 @@ public func <^> <T, Stream, U>(f: @escaping (T) -> U, p: Parser<T, Stream>) -> P
 }
 
 public extension Parser {
-    func map<U>(_ f: @escaping (Token) -> U) -> Parser<U, Stream> {
+    func map<U>(_ f: @escaping (Result) -> U) -> Parser<U, Stream> {
         return Parser<U, Stream>(parse: { (stream) -> ParseResult<(U, Stream)> in
             switch self.parse(stream) {
             case .success(let (r, remain)):

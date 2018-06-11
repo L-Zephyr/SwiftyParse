@@ -48,7 +48,7 @@ public func <* <T, U, S>(lhs: Parser<T, S>, rhs: Parser<U, S>) -> Parser<T, S> {
 }
 
 public extension Parser {
-    func apply<U>(_ parser: Parser<(Token) -> U, Stream>) -> Parser<U, Stream> {
+    func apply<U>(_ parser: Parser<(Result) -> U, Stream>) -> Parser<U, Stream> {
         return Parser<U, Stream> { (stream) -> ParseResult<(U, Stream)> in
             let lresult = parser.parse(stream)
             guard let l = lresult.value else {

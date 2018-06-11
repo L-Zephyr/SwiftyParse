@@ -21,58 +21,58 @@ precedencegroup ParserPlusLeft {
 
 infix operator ++ : ParserPlusLeft
 
-// Token + Token = [Token]
-public func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token], Stream> {
+// Result + Result = [Result]
+public func ++ <Result, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result, Stream>) -> Parser<[Result], Stream> {
     return lhs.plus(rhs)
 }
 
-// Token + [Token] = [Token]
-public func ++ <Token, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
+// Result + [Result] = [Result]
+public func ++ <Result, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<[Result], Stream>) -> Parser<[Result], Stream> {
     return lhs.plus(rhs)
 }
 
-// [Token] + Token = [Token]
-public func ++ <Token: Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
+// [Result] + Result = [Result]
+public func ++ <Result: Sequence, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result.Element, Stream>) -> Parser<[Result.Element], Stream> {
     return lhs.plus(rhs)
 }
 
-// [Token] + [Token] = [Token]
-public func ++ <Token:Sequence, Stream>(_ lhs: Parser<Token, Stream>, _ rhs: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
+// [Result] + [Result] = [Result]
+public func ++ <Result:Sequence, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result, Stream>) -> Parser<[Result.Element], Stream> {
     return lhs.plus(rhs)
 }
 
 // MARK: - Plus
 
 public extension Parser {
-    func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token], Stream> {
-        return self.flatMap({ (result1) -> Parser<[Token], Stream> in
-            return parser.flatMap({ (result2) -> Parser<[Token], Stream> in
+    func plus(_ parser: Parser<Result, Stream>) -> Parser<[Result], Stream> {
+        return self.flatMap({ (result1) -> Parser<[Result], Stream> in
+            return parser.flatMap({ (result2) -> Parser<[Result], Stream> in
                 return .result([result1, result2])
             })
         })
     }
     
-    func plus(_ parser: Parser<[Token], Stream>) -> Parser<[Token], Stream> {
-        return self.flatMap({ (result1) -> Parser<[Token], Stream> in
-            return parser.flatMap({ (result2) -> Parser<[Token], Stream> in
+    func plus(_ parser: Parser<[Result], Stream>) -> Parser<[Result], Stream> {
+        return self.flatMap({ (result1) -> Parser<[Result], Stream> in
+            return parser.flatMap({ (result2) -> Parser<[Result], Stream> in
                 return .result([result1] + result2)
             })
         })
     }
 }
 
-public extension Parser where Token: Sequence {
-    func plus(_ parser: Parser<Token.Element, Stream>) -> Parser<[Token.Element], Stream> {
-        return self.flatMap({ (tokens) -> Parser<[Token.Element], Stream> in
-            return parser.flatMap({ (token) -> Parser<[Token.Element], Stream> in
+public extension Parser where Result: Sequence {
+    func plus(_ parser: Parser<Result.Element, Stream>) -> Parser<[Result.Element], Stream> {
+        return self.flatMap({ (tokens) -> Parser<[Result.Element], Stream> in
+            return parser.flatMap({ (token) -> Parser<[Result.Element], Stream> in
                 return .result(Array(tokens) + [token])
             })
         })
     }
     
-    func plus(_ parser: Parser<Token, Stream>) -> Parser<[Token.Element], Stream> {
-        return self.flatMap({ (tokens1) -> Parser<[Token.Element], Stream> in
-            return parser.flatMap({ (tokens2) -> Parser<[Token.Element], Stream> in
+    func plus(_ parser: Parser<Result, Stream>) -> Parser<[Result.Element], Stream> {
+        return self.flatMap({ (tokens1) -> Parser<[Result.Element], Stream> in
+            return parser.flatMap({ (tokens2) -> Parser<[Result.Element], Stream> in
                 return .result(Array(tokens1) + Array(tokens2))
             })
         })

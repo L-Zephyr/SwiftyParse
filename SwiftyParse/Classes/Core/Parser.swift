@@ -10,21 +10,21 @@ import Foundation
 
 // MARK: - Parser
 
-public struct Parser<Token, Stream: Sequence> {
-    var parse: (Stream) -> ParseResult<(Token, Stream)>
+public struct Parser<Result, Stream: Sequence> {
+    public var parse: (Stream) -> ParseResult<(Result, Stream)>
 }
 
 public extension Parser {
     /// 始终返回success，结果为t，不消耗输入
-    static func result(_ t: Token) -> Parser<Token, Stream> {
-        return Parser(parse: { (stream) -> ParseResult<(Token, Stream)> in
+    static func result(_ t: Result) -> Parser<Result, Stream> {
+        return Parser(parse: { (stream) -> ParseResult<(Result, Stream)> in
             return .success((t, stream))
         })
     }
     
     /// 始终返回failure
-    static func error(_ err: ParseError) -> Parser<Token, Stream> {
-        return Parser(parse: { (_) -> ParseResult<(Token, Stream)> in
+    static func error(_ err: ParseError) -> Parser<Result, Stream> {
+        return Parser(parse: { (_) -> ParseResult<(Result, Stream)> in
             return .failure(err)
         })
     }

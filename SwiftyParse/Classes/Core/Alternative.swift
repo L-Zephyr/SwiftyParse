@@ -18,8 +18,8 @@ public extension Parser {
     ///
     /// - Parameter p: Parser，失败时的第二选择
     /// - Returns:     任一parser的解析结果或错误信息
-    func or(_ p: Parser<Token, Stream>) -> Parser<Token, Stream> {
-        return Parser<Token, Stream>(parse: { (tokens) -> ParseResult<(Token, Stream)> in
+    func or(_ p: Parser<Result, Stream>) -> Parser<Result, Stream> {
+        return Parser<Result, Stream>(parse: { (tokens) -> ParseResult<(Result, Stream)> in
             let r = self.parse(tokens)
             switch r {
             case .success(_):
@@ -34,8 +34,8 @@ public extension Parser {
     ///
     /// - Parameter ps: parser的数组，数组为空会返回一个Unknown错误
     /// - Returns:      任一成功的值或最后一个parser的错误信息
-    static func choice(_ ps: [Parser<Token, Stream>]) -> Parser<Token, Stream> {
-        return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+    static func choice(_ ps: [Parser<Result, Stream>]) -> Parser<Result, Stream> {
+        return Parser<Result, Stream>(parse: { (input) -> ParseResult<(Result, Stream)> in
             if ps.count == 0 {
                 return .failure(ParseError.unkown) // TODO: 错误类型？
             }
@@ -55,7 +55,7 @@ public extension Parser {
     }
     
     /// choice的变长参数版本
-    static func choice(_ ps: Parser<Token, Stream>...) -> Parser<Token, Stream>  {
+    static func choice(_ ps: Parser<Result, Stream>...) -> Parser<Result, Stream>  {
         return self.choice(ps)
     }
 }

@@ -15,9 +15,9 @@ public extension Parser {
     ///   - first: 初始值
     ///   - combinator: 接收初始值和self的解析结果作为输入，返回值作为下一次的输入
     /// - Returns: 累积的结果，该Parser不会失败
-    func reduce<Result>(_ first: Result, _ combinator: @escaping (Result, Token) -> Result) -> Parser<Result, Stream> {
-        return self.many.map { (nextList) -> Result in
-            nextList.reduce(first, { (first, two) -> Result in
+    func reduce<T>(_ first: T, _ combinator: @escaping (T, Result) -> T) -> Parser<T, Stream> {
+        return self.many.map { (nextList) -> T in
+            nextList.reduce(first, { (first, two) -> T in
                 return combinator(first, two)
             })
         }
@@ -29,8 +29,8 @@ public extension Parser {
     ///   - initValue: 初始值，使用该值作为第一个参数传入闭包，并将结果累积
     ///   - combinator: 参与解析并返回一个闭包，该闭包的计算结果将作为累积的值参与下一次运算
     /// - Returns: 累积的结果，该Parser不会失败
-    func reduce<Result>(_ initValue: Result, _ combinator: Parser<(Result, Token) -> Result, Stream>) -> Parser<Result, Stream> {
-        return Parser<Result, Stream>(parse: { (input) -> ParseResult<(Result, Stream)> in
+    func reduce<T>(_ initValue: T, _ combinator: Parser<(T, Result) -> T, Stream>) -> Parser<T, Stream> {
+        return Parser<T, Stream>(parse: { (input) -> ParseResult<(T, Stream)> in
             var result = initValue
             var remain = input
             while case .success(let (op, r1)) = combinator.parse(remain), case .success(let (num, r2)) = self.parse(r1) {
@@ -45,7 +45,7 @@ public extension Parser {
     ///
     /// - Parameter op: 解析结果为一个闭包，用于计算后续的累积值
     /// - Returns: 累积的结果，当self第一次解析失败的时候返回错误
-    func chainL(_ op: Parser<(Token, Token) -> Token, Stream>) -> Parser<Token, Stream> {
+    func chainL(_ op: Parser<(Result, Result) -> Result, Stream>) -> Parser<Result, Stream> {
         return self.flatMap { self.reduce($0, op) }
     }
     
@@ -53,13 +53,13 @@ public extension Parser {
     ///
     /// - Parameter combinator: 解析结果为一个闭包，用于计算后续的累积值
     /// - Returns: 计算从右向左累积的结果，当self第一次解析失败的时候返回错误
-    func chainR(_ combinator: Parser<(Token, Token) -> Token, Stream>) -> Parser<Token, Stream> {
-        return self.flatMap({ (initValue) -> Parser<Token, Stream> in
-            return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+    func chainR(_ combinator: Parser<(Result, Result) -> Result, Stream>) -> Parser<Result, Stream> {
+        return self.flatMap({ (initValue) -> Parser<Result, Stream> in
+            return Parser<Result, Stream>(parse: { (input) -> ParseResult<(Result, Stream)> in
                 var remain = input
                 
-                var ops = [(Token, Token) -> Token]()
-                var nums: [Token] = [initValue]
+                var ops = [(Result, Result) -> Result]()
+                var nums: [Result] = [initValue]
                 while case .success(let (op, r1)) = combinator.parse(remain), case .success(let (num, r2)) = self.parse(r1) {
                     ops.append(op)
                     nums.append(num)

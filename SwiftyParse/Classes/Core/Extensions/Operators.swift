@@ -14,8 +14,8 @@ import Foundation
 ///   - p:     需要执行的parser
 ///   - msg:   自定义的错误信息
 /// - Returns: 返回一个新的Parser，出错时返回msg
-public func <?><Token, Stream>(_ p: Parser<Token, Stream>, _ msg: String) -> Parser<Token, Stream> {
-    return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+public func <?><Result, Stream>(_ p: Parser<Result, Stream>, _ msg: String) -> Parser<Result, Stream> {
+    return Parser<Result, Stream>(parse: { (input) -> ParseResult<(Result, Stream)> in
         switch p.parse(input) {
         case .success(let (r, remain)):
             return .success((r, remain))
@@ -27,9 +27,9 @@ public func <?><Token, Stream>(_ p: Parser<Token, Stream>, _ msg: String) -> Par
 
 public extension Parser {
     /// 执行0次或多次parse，直到出错为止，解析结束返回结果列表，该Parser不会返回错误
-    var many: Parser<[Token], Stream> {
-        return Parser<[Token], Stream> { (stream) -> ParseResult<([Token], Stream)> in
-            var result = [Token]()
+    var many: Parser<[Result], Stream> {
+        return Parser<[Result], Stream> { (stream) -> ParseResult<([Result], Stream)> in
+            var result = [Result]()
             var remain = stream
             while true {
                 switch self.parse(remain) {
@@ -44,9 +44,9 @@ public extension Parser {
     }
     
     /// 尝试执行1次或多次parse，结果为空则返回错误
-    var many1: Parser<[Token], Stream> {
-        return Parser<[Token], Stream> { (stream) -> ParseResult<([Token], Stream)> in
-            var result = [Token]()
+    var many1: Parser<[Result], Stream> {
+        return Parser<[Result], Stream> { (stream) -> ParseResult<([Result], Stream)> in
+            var result = [Result]()
             var remain = stream
             while true {
                 switch self.parse(remain) {
@@ -68,10 +68,10 @@ public extension Parser {
     ///
     /// - Parameter end: 成功则表示结束
     /// - Returns:       成功解析的结果数组或错误
-    func manyTill(_ end: Parser<Token, Stream>) -> Parser<[Token], Stream> {
-        return Parser<[Token], Stream> { (input) -> ParseResult<([Token], Stream)> in
+    func manyTill(_ end: Parser<Result, Stream>) -> Parser<[Result], Stream> {
+        return Parser<[Result], Stream> { (input) -> ParseResult<([Result], Stream)> in
             var remain = input
-            var results = [Token]()
+            var results = [Result]()
             while true {
                 if case .success(_) = end.parse(remain) {
                     return .success((results.compactMap { $0 }, remain))
@@ -92,9 +92,9 @@ public extension Parser {
     ///
     /// - Parameter num: 至少成功解析的次数
     /// - Returns:       成功解析的结果列表
-    func `repeat`(_ num: Int) -> Parser<[Token], Stream> {
-        return Parser<[Token], Stream>(parse: { (input) -> ParseResult<([Token], Stream)> in
-            var result = [Token]()
+    func `repeat`(_ num: Int) -> Parser<[Result], Stream> {
+        return Parser<[Result], Stream>(parse: { (input) -> ParseResult<([Result], Stream)> in
+            var result = [Result]()
             var remainder = input
             var error: ParseError? = nil
             
@@ -125,9 +125,9 @@ public extension Parser {
     ///
     /// - Parameter num: 解析次数, 为0则返回[]
     /// - Returns:       解析结果列表或错误
-    func count(_ num: Int) -> Parser<[Token], Stream> {
-        return Parser<[Token], Stream>(parse: { (input) -> ParseResult<([Token], Stream)> in
-            var results = [Token]()
+    func count(_ num: Int) -> Parser<[Result], Stream> {
+        return Parser<[Result], Stream>(parse: { (input) -> ParseResult<([Result], Stream)> in
+            var results = [Result]()
             var remain = input
             for _ in 0..<num {
                 switch self.parse(remain) {
@@ -145,9 +145,9 @@ public extension Parser {
     /// 匹配0个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: parser的结果包含所有成功解析Token的数组，在解析完最后一个Token后如果还跟着分隔符的话会返回错误
-    func sepBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
-        return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
+    /// - Returns: parser的结果包含所有成功解析Result的数组，在解析完最后一个Result后如果还跟着分隔符的话会返回错误
+    func sepBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
+        return Parser<[Result], Stream>(parse: { (stream) -> ParseResult<([Result], Stream)> in
             guard case let .success((first, remain)) = self.parse(stream) else {
                 return .success(([], stream))
             }
@@ -167,13 +167,13 @@ public extension Parser {
     /// 至少匹配1个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: parser的结果包含所有成功解析Token的数组，数组中至少包含一个结果；在解析完最后一个Token后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
-    func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
-        return self.flatMap({ (first) -> Parser<[Token], Stream> in
+    /// - Returns: parser的结果包含所有成功解析Result的数组，数组中至少包含一个结果；在解析完最后一个Result后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
+    func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
+        return self.flatMap({ (first) -> Parser<[Result], Stream> in
             return (separator *> self)
                 .many
                 .notFollowedBy(separator)
-                .flatMap({ (tokens) -> Parser<[Token], Stream> in
+                .flatMap({ (tokens) -> Parser<[Result], Stream> in
                     return .result([first] + tokens)
                 })
         })
@@ -183,7 +183,7 @@ public extension Parser {
     ///
     /// - Parameter separator: 分隔符规则
     /// - Returns: 结果数组，不会返回错误
-    func endBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
+    func endBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
         return (self <* separator).many
     }
     
@@ -191,7 +191,7 @@ public extension Parser {
     ///
     /// - Parameter separator: 分隔符
     /// - Returns: 解析成功的结果数组或错误信息
-    func endBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
+    func endBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
         return (self <* separator).many1
     }
     
@@ -201,13 +201,13 @@ public extension Parser {
     ///   - open:  在self左侧的操作符
     ///   - close: 在self右侧的操作符
     /// - Returns: 解析成功返回self的解析结果，失败返回错误
-    func between<L, R>(_ open: Parser<L, Stream>, _ close: Parser<R, Stream>) -> Parser<Token, Stream> {
+    func between<L, R>(_ open: Parser<L, Stream>, _ close: Parser<R, Stream>) -> Parser<Result, Stream> {
         return open *> self <* close;
     }
     
     /// 尝试解析，如果失败的话返回结果nil且不消耗输入，不会返回错误
-    var `try`: Parser<Token?, Stream> {
-        return Parser<Token?, Stream>(parse: { (input) -> ParseResult<(Token?, Stream)> in
+    var `try`: Parser<Result?, Stream> {
+        return Parser<Result?, Stream>(parse: { (input) -> ParseResult<(Result?, Stream)> in
             switch self.parse(input) {
             case .success(let (r, remain)):
                 return .success((r, remain))
@@ -218,8 +218,8 @@ public extension Parser {
     }
     
     /// 尝试解析应用当前的Parser，执行成功不会消耗输入
-    var lookahead: Parser<Token, Stream> {
-        return Parser<Token, Stream>(parse: { (input) -> ParseResult<(Token, Stream)> in
+    var lookahead: Parser<Result, Stream> {
+        return Parser<Result, Stream>(parse: { (input) -> ParseResult<(Result, Stream)> in
             switch self.parse(input) {
             case .success(let (r, _)):
                 return .success((r, input))
@@ -233,13 +233,13 @@ public extension Parser {
     ///
     /// - Parameter p: 任意结果类型的Parser
     /// - Returns: 新的Parser，成功时返回self的结果
-    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
+    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Result, Stream> {
         return self <* p.not
     }
     
     /// `p.not`当p解析成功的时候返回failure，p解析失败的时候返回success, 不消耗输入
-    var not: Parser<Token?, Stream> {
-        return Parser<Token?, Stream>(parse: { (input) -> ParseResult<(Token?, Stream)> in
+    var not: Parser<Result?, Stream> {
+        return Parser<Result?, Stream>(parse: { (input) -> ParseResult<(Result?, Stream)> in
             switch self.parse(input) {
             case .success(let (r, _)):
                 return .failure(.notMatch("Unexpected found: \(r)"))
