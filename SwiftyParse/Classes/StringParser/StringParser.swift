@@ -14,22 +14,22 @@ public typealias S = Parser<String, InputString>
 
 public extension Parser where Stream == InputString {
     /// 快捷方法，接收一个字符串作为输入
-    func parse(_ string: String) -> ParseResult<(Token, Stream)> {
+    func parse(_ string: String) -> ParseResult<(Result, Stream)> {
         let input = InputString(characters: Array(string), row: 0, column: 0)
         return self.parse(input)
     }
     
     /// 快捷方法，接收一个字符数组作为输入
-    func parse(_ chars: [Character]) -> ParseResult<(Token, Stream)> {
+    func parse(_ chars: [Character]) -> ParseResult<(Result, Stream)> {
         let input = InputString(characters: chars, row: 0, column: 0)
         return self.parse(input)
     }
 }
 
-public extension Parser where Token == String, Stream == InputString {
+public extension Parser where Result == String, Stream == InputString {
     
     /// 创建一个单个字符Parser的快捷方法
-    static func satisfy(_ condition: @escaping (Token) -> Bool) -> S {
+    static func satisfy(_ condition: @escaping (Result) -> Bool) -> S {
         return S(parse: { (input) -> ParseResult<(String, InputString)> in
             if let first = input.first(), condition(String(first)) {
                 let value = String(first)

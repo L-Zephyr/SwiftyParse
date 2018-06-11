@@ -18,17 +18,17 @@ public struct InputString {
 
 // MARK: - Extension
 
-public extension InputString: Sequence {
-    typealias Element = Character
-    typealias Iterator = Array<Character>.Iterator
+extension InputString: Sequence {
+    public typealias Element = Character
+    public typealias Iterator = Array<Character>.Iterator
     
-    func makeIterator() -> Iterator {
+    public func makeIterator() -> Iterator {
         return self.characters.makeIterator()
     }
 }
 
-public extension InputString: Equatable {
-    static func == (_ lhs: InputString, _ rhs: InputString) -> Bool {
+extension InputString: Equatable {
+    public static func == (_ lhs: InputString, _ rhs: InputString) -> Bool {
         return lhs.characters == rhs.characters && lhs.row == rhs.row && lhs.column == rhs.column
     }
 }

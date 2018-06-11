@@ -15,9 +15,9 @@ public extension Parser where Stream == InputString {
     /// 匹配0个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: parser的结果包含所有成功解析Token的数组，在解析完最后一个Token后如果还跟着分隔符的话会返回错误
-    func sepBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
-        return Parser<[Token], Stream>(parse: { (stream) -> ParseResult<([Token], Stream)> in
+    /// - Returns: parser的结果包含所有成功解析Result的数组，在解析完最后一个Result后如果还跟着分隔符的话会返回错误
+    func sepBy<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
+        return Parser<[Result], Stream>(parse: { (stream) -> ParseResult<([Result], Stream)> in
             guard case let .success((first, remain)) = self.parse(stream) else {
                 return .success(([], stream))
             }
@@ -37,13 +37,13 @@ public extension Parser where Stream == InputString {
     /// 至少匹配1个或多个由separator分隔的self，在解析完最后一个项目之后不能跟着分隔符
     ///
     /// - Parameter separator: 分隔符
-    /// - Returns: parser的结果包含所有成功解析Token的数组，数组中至少包含一个结果；在解析完最后一个Token后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
-    func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Token], Stream> {
-        return self.flatMap({ (first) -> Parser<[Token], Stream> in
+    /// - Returns: parser的结果包含所有成功解析Result的数组，数组中至少包含一个结果；在解析完最后一个Result后如果还跟着分隔符的话会返回错误，如果结果为空也会返回错误
+    func sepBy1<U>(_ separator: Parser<U, Stream>) -> Parser<[Result], Stream> {
+        return self.flatMap({ (first) -> Parser<[Result], Stream> in
             return (separator *> self)
                 .many
                 .notFollowedBy(separator)
-                .flatMap({ (tokens) -> Parser<[Token], Stream> in
+                .flatMap({ (tokens) -> Parser<[Result], Stream> in
                     return .result([first] + tokens)
                 })
         })
@@ -55,13 +55,13 @@ public extension Parser where Stream == InputString {
     ///
     /// - Parameter p: 任意结果类型的Parser
     /// - Returns: 新的Parser，成功时返回self的结果
-    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Token, Stream> {
+    func notFollowedBy<U>(_ p: Parser<U, Stream>) -> Parser<Result, Stream> {
         return self <* p.not
     }
     
     /// `p.not`当p解析成功的时候返回failure，p解析失败的时候返回success, 不消耗输入
-    var not: Parser<Token?, InputString> {
-        return Parser<Token?, InputString>(parse: { (input) -> ParseResult<(Token?, InputString)> in
+    var not: Parser<Result?, InputString> {
+        return Parser<Result?, InputString>(parse: { (input) -> ParseResult<(Result?, InputString)> in
             switch self.parse(input) {
             case .success(let (r, _)):
                 return .failure(.notMatch("Unexpected token found: `\(r)` (row: \(input.row), column: \(input.column))"))

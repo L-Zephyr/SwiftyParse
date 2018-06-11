@@ -23,7 +23,7 @@ extension Array where Element: Equatable {
     }
 }
 
-extension Parser where Token: Equatable, Stream: Equatable {
+extension Parser where Result: Equatable, Stream: Equatable {
     
     /// 断言parse结果为.success
     ///
@@ -31,7 +31,7 @@ extension Parser where Token: Equatable, Stream: Equatable {
     ///   - input:  输入
     ///   - value:  期望的结果
     ///   - remain: 期望剩余的输入
-    func assertSuccess(input: Stream, value: Token, remain: Stream, message: String = "") {
+    func assertSuccess(input: Stream, value: Result, remain: Stream, message: String = "") {
         switch self.parse(input) {
         case .success(let (r, rest)):
             XCTAssert(value == r, message)
@@ -56,8 +56,8 @@ extension Parser where Token: Equatable, Stream: Equatable {
 
 // MARK: - StringParser
 
-extension Parser where Token: Equatable, Stream == InputString {
-    func assertSuccess(input: [Character], value: Token, remain: [Character], message: String = "") {
+extension Parser where Result: Equatable, Stream == InputString {
+    func assertSuccess(input: [Character], value: Result, remain: [Character], message: String = "") {
         switch self.parse(input) {
         case .success(let (r, rest)):
             XCTAssert(value == r, "结果: \(r), \(message)")

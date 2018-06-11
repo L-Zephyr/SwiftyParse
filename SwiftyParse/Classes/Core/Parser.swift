@@ -12,6 +12,10 @@ import Foundation
 
 public struct Parser<Result, Stream: Sequence> {
     public var parse: (Stream) -> ParseResult<(Result, Stream)>
+    
+    public init(parse: @escaping (Stream) -> ParseResult<(Result, Stream)>) {
+        self.parse = parse
+    }
 }
 
 public extension Parser {
