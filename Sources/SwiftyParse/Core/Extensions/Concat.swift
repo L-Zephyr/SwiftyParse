@@ -1,5 +1,5 @@
 //
-//  Plus.swift
+//  Concat.swift
 //  SwiftyParse
 //
 //  Created by LZephyr on 2018/4/6.
@@ -9,9 +9,9 @@
 import Foundation
 
 /*
- `plus`操作符，从左向右依次解析两个相同类型的Parser，并将它们的结果保存在数组中返回
+ `concat`操作符，从左向右依次解析两个相同类型的Parser，并将它们的结果保存在数组中返回
  */
-precedencegroup ParserPlusLeft {
+precedencegroup ParserConcatLeft {
     associativity: left
     lowerThan: LogicalDisjunctionPrecedence
     higherThan: AssignmentPrecedence
@@ -19,32 +19,32 @@ precedencegroup ParserPlusLeft {
 
 // MARK: - +
 
-infix operator ++ : ParserPlusLeft
+infix operator ++ : ParserConcatLeft
 
 // Result + Result = [Result]
 public func ++ <Result, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result, Stream>) -> Parser<[Result], Stream> {
-    return lhs.plus(rhs)
+    return lhs.concat(rhs)
 }
 
 // Result + [Result] = [Result]
 public func ++ <Result, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<[Result], Stream>) -> Parser<[Result], Stream> {
-    return lhs.plus(rhs)
+    return lhs.concat(rhs)
 }
 
 // [Result] + Result = [Result]
 public func ++ <Result: Sequence, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result.Element, Stream>) -> Parser<[Result.Element], Stream> {
-    return lhs.plus(rhs)
+    return lhs.concat(rhs)
 }
 
 // [Result] + [Result] = [Result]
 public func ++ <Result:Sequence, Stream>(_ lhs: Parser<Result, Stream>, _ rhs: Parser<Result, Stream>) -> Parser<[Result.Element], Stream> {
-    return lhs.plus(rhs)
+    return lhs.concat(rhs)
 }
 
-// MARK: - Plus
+// MARK: - concat
 
 public extension Parser {
-    func plus(_ parser: Parser<Result, Stream>) -> Parser<[Result], Stream> {
+    func concat(_ parser: Parser<Result, Stream>) -> Parser<[Result], Stream> {
         return self.flatMap({ (result1) -> Parser<[Result], Stream> in
             return parser.flatMap({ (result2) -> Parser<[Result], Stream> in
                 return .result([result1, result2])
@@ -52,7 +52,7 @@ public extension Parser {
         })
     }
     
-    func plus(_ parser: Parser<[Result], Stream>) -> Parser<[Result], Stream> {
+    func concat(_ parser: Parser<[Result], Stream>) -> Parser<[Result], Stream> {
         return self.flatMap({ (result1) -> Parser<[Result], Stream> in
             return parser.flatMap({ (result2) -> Parser<[Result], Stream> in
                 return .result([result1] + result2)
@@ -62,7 +62,7 @@ public extension Parser {
 }
 
 public extension Parser where Result: Sequence {
-    func plus(_ parser: Parser<Result.Element, Stream>) -> Parser<[Result.Element], Stream> {
+    func concat(_ parser: Parser<Result.Element, Stream>) -> Parser<[Result.Element], Stream> {
         return self.flatMap({ (tokens) -> Parser<[Result.Element], Stream> in
             return parser.flatMap({ (token) -> Parser<[Result.Element], Stream> in
                 return .result(Array(tokens) + [token])
@@ -70,7 +70,7 @@ public extension Parser where Result: Sequence {
         })
     }
     
-    func plus(_ parser: Parser<Result, Stream>) -> Parser<[Result.Element], Stream> {
+    func concat(_ parser: Parser<Result, Stream>) -> Parser<[Result.Element], Stream> {
         return self.flatMap({ (tokens1) -> Parser<[Result.Element], Stream> in
             return parser.flatMap({ (tokens2) -> Parser<[Result.Element], Stream> in
                 return .result(Array(tokens1) + Array(tokens2))

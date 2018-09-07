@@ -1,5 +1,5 @@
 //
-//  PlusTest.swift
+//  ConcatTest.swift
 //  Tests
 //
 //  Created by LZephyr on 2018/4/6.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import SwiftyParse
 
-class PlusTest: XCTestCase {
+class ConcatTest: XCTestCase {
 
     override func setUp() {
         super.setUp()
