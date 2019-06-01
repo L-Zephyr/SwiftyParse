@@ -31,7 +31,7 @@ public extension Parser where Result == String, Stream == InputString {
     /// 创建一个单个字符Parser的快捷方法
     static func satisfy(_ condition: @escaping (Result) -> Bool) -> S {
         return S(parse: { (input) -> ParseResult<(String, InputString)> in
-            if let first = input.first(), condition(String(first)) {
+            if let first = input.first(), condition(String(first)) { // 解析成功
                 let value = String(first)
                 return .success((value, input.dropFirst()))
             } else if input.isEmpty() {
@@ -40,11 +40,6 @@ public extension Parser where Result == String, Stream == InputString {
                 return .failure(.notMatch("Unexpected token found: \(input.first()!) (row: \(input.row), column: \(input.column))"))
             }
         })
-    }
-    
-    /// 匹配单个字符
-    static func char(_ c: Character) -> S {
-        return S.satisfy({ $0 == String(c) })
     }
     
     /// 匹配一个字符串
@@ -56,6 +51,20 @@ public extension Parser where Result == String, Stream == InputString {
             return .success((s, input.drop(s.count)))
             
         })
+    }
+    
+    /// 匹配单个字符
+    static func char(_ c: Character) -> S {
+        return S.satisfy({ $0 == String(c) })
+    }
+    
+    /// 匹配任意单词（连续的字母串）
+    static var word: S {
+        return S.satisfy({ (c) -> Bool in
+                return (c > "a" && c < "z") || (c > "A" && c < "Z")
+            })
+            .many1
+            .joined()
     }
     
     /// 匹配单个数字
@@ -86,4 +95,20 @@ public extension Parser where Result == String, Stream == InputString {
             return chars.contains(s)
         }
     }
+    
+    /// 匹配一个任意字符
+    static var any: S {
+        return S.satisfy({ (s) -> Bool in
+            return true
+        })
+    }
+}
+
+public extension Parser where Result == [String], Stream == InputString {
+    /// 将[String]类型的结果合并成String
+    func joined(separator: String = "") -> S {
+        return self.map({ (results) -> String in
+            return results.joined(separator: separator)
+        })
+    }    
 }

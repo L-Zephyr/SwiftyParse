@@ -8,12 +8,21 @@
 
 import Foundation
 
-
 /// 作为数据源输入的字符串
 public struct InputString {
     let characters: [Character] // 剩余的字符
     let row: Int // 当前位置在原始输入中的行号
     let column: Int // 当前位置在原始输入中的列号
+    
+    var range: Range<Int> = 0..<1 // 成功解析的范围
+    var offset: Int = 0 // 当前位置在文件中的偏移量
+    
+    init(characters: [Character], row: Int, column: Int) {
+        self.characters = characters
+        self.row = row
+        self.column = column
+        self.range = offset..<offset+1
+    }
 }
 
 // MARK: - Extension

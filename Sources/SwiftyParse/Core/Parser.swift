@@ -34,6 +34,11 @@ public extension Parser {
     }
 }
 
+/// 用于Parser自身的递归调用
+public func lazy<T, S: Sequence>(_ parser: @autoclosure @escaping () -> Parser<T, S>) -> Parser<T, S> {
+    return Parser<T, S> { parser().parse($0) }
+}
+
 // MARK: - ParseResult
 
 public enum ParseResult<T> {
